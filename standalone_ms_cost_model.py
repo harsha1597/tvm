@@ -23,9 +23,10 @@ from datetime import datetime
 from pathlib import Path
 from types import MappingProxyType
 from typing import Optional, Callable
-
+import re
 import numpy as np
-
+import glob
+from tqdm import tqdm
 import tvm
 from tvm import meta_schedule as ms
 from tvm.meta_schedule.logging import get_logger
@@ -116,14 +117,76 @@ def test_cost_model(cost_model, samples):
 def load_tir(tir_path):
     with open(tir_path, "r") as f:
         content = f.read()
-    obj = tvm.script.from_source(content)
-    print("obj", obj, dir(obj), type(obj))
-    if isinstance(obj, tvm.tir.PrimFunc):
-        default_name = "main"
-        obj = tvm.IRModule({default_name: obj})
-    assert isinstance(obj, tvm.IRModule)
-    return obj
 
+    # As tvm.script.from_source is unable to handle multiple Primfunc in a file
+    funct = [x for x in content.split("# from tvm.script import tir as T") if x.strip() ]
+    # objs = [tvm.script.from_source(tir_source_code) for tir_source_code in funct]
+    objs = []
+    for tir_source_code in funct:
+        if not tir_source_code.strip():
+            continue
+        try:
+            obj = tvm.script.from_source(tir_source_code)
+        except:
+
+            print(f"Error parsing TIR source code, trying workaround for T.realize")
+            try: # Format T.realize to be compatible with TVM 0.13
+                pattern = r"T\.realize\s*\(([^()]*)\)"
+                replacement = r'T.realize(\1, "global", True)'
+                new_code = re.sub(pattern, replacement, tir_source_code)
+                obj = tvm.script.from_source(new_code)
+                print("Successfully replaced T.realize with global realization")
+            except Exception as e:
+                print(f"Error replacing T.realize: {tir_source_code}")
+                raise e
+
+            
+        if isinstance(obj, tvm.tir.PrimFunc):
+            default_name = "main"
+            obj = tvm.IRModule({default_name: obj})
+            # obj = tvm.IRModule({obj.attrs["global_symbol"]: obj})
+            assert isinstance(obj, tvm.IRModule)
+        yield obj
+
+    # ret=[]
+    # for obj in objs:
+    #     if isinstance(obj, tvm.tir.PrimFunc):
+    #         default_name = "main"
+    #         obj = tvm.IRModule({default_name: obj})
+    #     assert isinstance(obj, tvm.IRModule)
+    #     ret.append(obj)
+    # return ret
+def benchmark_mod(ir_module):
+    """
+    Builds function from IRModule and returns the mean time taken to execute the function in milliseconds.
+    """
+    func = ir_module["main"]
+    test_inputs = []
+    func_name = func.attrs["global_symbol"]
+    
+    # The function's buffer_map holds the key-value pair of handle to Buffer object
+    for _, buffer_obj in func.buffer_map.items():
+    
+        shape = tuple(int(s) for s in buffer_obj.shape)
+        dtype = buffer_obj.dtype
+        test_inputs.append(tvm.nd.array(np.random.rand(*shape).astype(dtype)))
+    
+    lib = tvm.build(ir_module, target="llvm")
+    f_timer_before = lib.time_evaluator(func_name, tvm.cpu())
+
+    return f_timer_before(*test_inputs).mean * 1000
+
+def generate_samples_from_session(session_path):
+    """
+    Generates samples from a session path.
+    """
+    tir_files = glob.glob(os.path.join(session_path, "default.tir*"))
+    if not tir_files:
+        raise ValueError(f"No TIR files found in the session path: {session_path}")
+    mods = []
+    for tir_file in tir_files:
+        mods.extend(load_tir(tir_file))
+    return [(mod, benchmark_mod(mod)) for mod in tqdm(mods)]
 
 def main():
     parser = argparse.ArgumentParser(
@@ -141,13 +204,12 @@ def main():
         help="Path to save the trained cost model file"
     )
     parser.add_argument(
-        "--samples",
-        # type=float,
-        nargs="+",
+        "--session-path",
+        type=Path,
         help=(
-            "List of samples as alternating values: [feature, runtime, feature, runtime, ...]. "
-            "Must be even-length."
-        )
+            "Path to the directory with tir dumps"
+        ),
+        required=True
     )
     parser.add_argument(
         "--randomize",
@@ -177,7 +239,7 @@ def main():
         samples = [(samples[2*i], samples[2*i+1]) for i in range(len(samples) // 2)]
         samples_cnt = len(samples)
         print("samples", samples)
-        samples = [(load_tir(x[0]), float(x[1])) for x in samples]
+        samples = [(load_tir(x[0]), float(x[1])) for x in samples] # List of tuples of IR module and run times
     # task_name = mod.func_name
         if args.randomize:
             raise NotImplementedError("randomize sample order")

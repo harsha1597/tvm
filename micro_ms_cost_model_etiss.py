@@ -251,6 +251,7 @@ def test_micro_tuning_with_meta_schedule(platform, alter_op, target, num_trials_
 
             ) as runner:
                 if max_trials_global > 0:
+                    ## tasks are induvidual functions
                     tasks, task_weights = ms.relay_integration.extracted_tasks_to_tune_contexts(
                         extracted_tasks=ms.relay_integration.extract_tasks(
                             mod,

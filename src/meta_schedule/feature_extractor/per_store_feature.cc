@@ -1065,12 +1065,12 @@ struct Feature {
   void Export(std::vector<double>* v) const {
     v->insert(v->end(), arith_intensity_curve.begin(), arith_intensity_curve.end());
   }
-
+  // explicit prevents implicit typeconversion to objects
   explicit Feature(int n_samples, const LoopNest& loop_nest, const IntVec& for_touched_bytes,
                    const group1::Feature::ArithOps& arith_ops)
       : arith_intensity_curve(n_samples, 0.0) {
     const std::vector<const ForNode*>& loops = loop_nest.loops;
-    ICHECK_EQ(loops.size(), for_touched_bytes.size());
+    ICHECK_EQ(loops.size(), for_touched_bytes.size()); // Check if both terms are equal, raise error if not
     int n_loops = loops.size();
     // Calculate `memory_bytes`
     std::vector<double> memory_bytes;
@@ -1388,6 +1388,30 @@ class PerStoreFeatureNode : public FeatureExtractorNode {
       feature.group4->Export(&result, feature.group5->outer_prod);
       feature.group5->Export(&result);
     }
+  }
+
+  Array<runtime::NDArray> ExtractFromSchedule(const TuneContext& tune_context,
+                                      const Array<MeasureCandidate>& candidates) {
+    bool is_gpu = tune_context->target.value()->kind->name == "cuda";
+    std::vector<runtime::NDArray> results;
+    // results.resize(candidates.size());
+    std::unique_ptr<tir::group6::Feature> feature_group6 = nullptr;
+    if (extract_workload) {
+      feature_group6 = std::make_unique<tir::group6::Feature>(tune_context->mod.value());
+    }
+    auto f = [this, is_gpu, &feature_group6, &candidates, &results](int, int task_id) -> void {
+      const auto& candidate = candidates[task_id];
+      std::vector<std::vector<double>> features;
+      ExtractSingle(DeepCopyIRModule(candidate->sch->mod()), is_gpu, &features);
+      if (extract_workload) {
+        for (auto& feature : features) {
+          feature_group6->Export(&feature);
+        }
+      }
+      results[task_id] = tir::utils::AsNDArray(features, this->feature_vector_length);
+    };
+    support::parallel_for_dynamic(0, candidates.size(), tune_context->num_threads, f);
+    return results;
   }
 
   Array<runtime::NDArray> ExtractFrom(const TuneContext& tune_context,

@@ -56,8 +56,8 @@ def generate_tasks(samples):
     search_strategy = None
     for sample in samples:
         mod, runtime = sample
-        print("mod", mod, type(mod))
-        print("runtime", runtime, type(runtime))
+        # print("mod", mod, type(mod))
+        # print("runtime", runtime, type(runtime))
         ctx = ms.tune_context.TuneContext(
             mod=mod,
             target=target,
@@ -156,6 +156,7 @@ def load_tir(tir_path):
     #     assert isinstance(obj, tvm.IRModule)
     #     ret.append(obj)
     # return ret
+
 def benchmark_mod(ir_module):
     """
     Builds function from IRModule and returns the mean time taken to execute the function in milliseconds.

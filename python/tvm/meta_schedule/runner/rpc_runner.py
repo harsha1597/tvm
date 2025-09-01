@@ -15,13 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 """RPC Runner"""
-import time
 import concurrent.futures
 import os.path as osp
 from contextlib import contextmanager
-from typing import Callable, List, Optional, Union
+from typing import Callable, List, Optional, Union, Dict
 
-import tvm
 from tvm.contrib.popen_pool import PopenPoolExecutor
 from tvm.rpc import RPCSession
 from tvm.runtime import Device, Module
@@ -118,23 +116,27 @@ class RPCRunnerFuture(PyRunnerFuture):
         return self.future.done()
 
     def result(self) -> RunnerResult:
-        timestamp = time.time()
-        timestamp = tvm.tir.FloatImm("float64", timestamp)
         try:
-            run_secs: List[float] = self.future.result()
+            costs: Dict[str, float] = self.future.result()
+            print("costs")
+            run_secs: List[float] = costs.get("run_secs", None)
+            print("rs", run_secs)
+            mem: List[float] = costs.get("mem", None)
+            print("m", mem)
         except TimeoutError:
             return RunnerResult(
                 None,
+                None,
                 error_msg=f"RPCRunner: Timeout, killed after {self.timeout_sec} seconds",
-                timestamp=timestamp,
             )
         except Exception as exception:  # pylint: disable=broad-except
             return RunnerResult(
                 None,
+                None,
                 error_msg="RPCRunner: An exception occurred\n" + str(exception),
-                timestamp=timestamp,
             )
-        return RunnerResult(run_secs, None, timestamp)
+        # return RunnerResult(run_secs, None)
+        return RunnerResult(run_secs, mem, None)
 
 
 @derived_object
@@ -405,7 +407,7 @@ def _worker_func(
                 alloc_repeat,
             )
         # Step 4: Run time_evaluator
-        with Profiler.timeit("LocalRunner/run_evaluator"):
+        with Profiler.timeit("RPCRunner/run_evaluator"):
             costs: List[float] = f_run_evaluator(
                 session,
                 rt_mod,

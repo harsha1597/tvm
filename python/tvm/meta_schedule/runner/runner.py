@@ -82,19 +82,16 @@ class RunnerResult(Object):
         The run time in seconds.
     error_msg : Optional[str]
         The error message, if any.
-    timestamp : Optional[float]
-        TODO.
     """
 
     run_secs: Optional[List[float]]
     error_msg: Optional[str]
-    timestamp: Optional[float]
 
     def __init__(
         self,
         run_secs: Optional[List[float]],
+        mem: Optional[List[float]],
         error_msg: Optional[str],
-        timestamp: Optional[float],
     ) -> None:
         """Constructor
 
@@ -108,8 +105,8 @@ class RunnerResult(Object):
         self.__init_handle_by_constructor__(
             _ffi_api.RunnerResult,  # type: ignore # pylint: disable=no-member
             run_secs,
+            mem,
             error_msg,
-            timestamp,
         )
 
 

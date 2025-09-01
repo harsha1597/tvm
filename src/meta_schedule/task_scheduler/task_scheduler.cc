@@ -85,12 +85,8 @@ void SendToRunner(TaskRecordNode* self, const Runner& runner) {
           /*f_done=*/[]() -> bool { return true; },
           /*f_result=*/
           [msg = builder_result->error_msg]() -> RunnerResult {
-            using namespace std::chrono;
-            Optional<FloatImm> timestamp;
-            auto tp = system_clock::now() + 0ns;
-            double t1 = tp.time_since_epoch().count();
-            timestamp = FloatImm(DataType::Float(64), t1);
-            return RunnerResult(NullOpt, msg, timestamp);
+            // return RunnerResult(NullOpt, msg);
+            return RunnerResult(NullOpt, NullOpt, msg);
           }));
     } else {
       results.push_back(futures[j++]);
@@ -111,15 +107,29 @@ void TaskCleanUp(TaskRecordNode* self, int task_id, const Array<RunnerResult>& r
     const RunnerResult& runner_result = results[i];
     Optional<String> error_msg = NullOpt;
     int trials = self->latency_ms.size() + 1;
-    double run_ms = 1e9;
+    double run_ms = 0;
+    double text_kb = 0;
+    double rodata_kb = 0;
+    double const_kb = 0;
+    double workspace_kb = 0;
     if ((error_msg = builder_result->error_msg)) {
       ++self->build_error_count;
     } else if ((error_msg = runner_result->error_msg)) {
       ++self->run_error_count;
     } else {
       run_ms = GetRunMsMedian(runner_result);
+      Array<FloatImm> mem = runner_result->mem.value();
+      ICHECK(mem.size() == 4);
+      text_kb = mem[0]->value;
+      rodata_kb = mem[1]->value;
+      const_kb = mem[2]->value;
+      workspace_kb = mem[3]->value;
     }
     self->latency_ms.push_back(run_ms);
+    self->text_kb.push_back(text_kb);
+    self->rodata_kb.push_back(rodata_kb);
+    self->const_kb.push_back(const_kb);
+    self->workspace_kb.push_back(workspace_kb);
     if (error_msg) {
       const tir::Schedule& sch = candidate->sch;
       std::string err = error_msg.value();
@@ -144,74 +154,6 @@ void TaskCleanUp(TaskRecordNode* self, int task_id, const Array<RunnerResult>& r
   self->builder_results = NullOpt;
   self->runner_futures = NullOpt;
 }
-
-
-
-// void SendTaskToBuilder(Array<TuneContext> ctxs, const Builder& builder) {
-//   auto _ = Profiler::TimedScope("SendTaskToBuilder");
-//   // Array<MeasureCandidate> candidates = self->measure_candidates.value();
-//   int n_tasks = ctxs.size();
-//   Target target = ctxs[0]->target.value(); // Assuming all contexts have the same target
-//   Array<BuilderInput> inputs;
-//   inputs.reserve(n_tasks);
-  
-//   for (const TuneContext& ctx : ctxs) {
-    
-//     inputs.push_back(BuilderInput(ctx->mod(), target));
-//   }
-//   self->builder_results = builder->Build(inputs);
-// }
-
-
-// int max_trials_global, int max_trials_per_task,
-// int num_trials_per_iter
-
-void TaskSchedulerNode::GetFuturesFromTask(Array<TuneContext> ctxs, Array<FloatImm> task_weights, Builder builder, Runner runner,
-                             Array<MeasureCallback> measure_callbacks, Optional<Database> database) {
-
-  CHECK_EQ(ctxs.size(), task_weights.size()) << "ValueError: `task_weights` must have the same "
-                                                "length as `ctxs`";
-  int n_tasks = this->remaining_tasks_ = ctxs.size();
-  this->measure_callbacks_ = measure_callbacks;
-  this->database_ = database;
-  // this->cost_model_ = cost_model;
-  this->tasks_.clear();
-  this->tasks_.reserve(n_tasks);
-  // Run search strategy
-  for (int i = 0; i < n_tasks; ++i) {
-    const TuneContext& ctx = ctxs[i];
-    double weight = task_weights[i]->value;
-    TVM_PY_LOG(INFO, this->logger) << "Initializing Task #" << i << ": " << ctx->task_name;
-    TVM_PY_LOG(INFO, ctx->logger) << "Initializing Task #" << i << ": " << ctx->task_name;
-
-    this->tasks_.push_back(TaskRecord(ctx, weight));
-
-  }
-
-
-  for (int task_id = 0; task_id < n_tasks; ++task_id) {
-    // TVM_PY_LOG(INFO, this->logger)
-    //     << "TaskScheduler picks Task #" << task_id << ": " << tasks_[task_id]->ctx->task_name;
-
-    TaskRecordNode* task = tasks_[task_id].get();
-    ICHECK(!task->is_terminated);
-    ICHECK(!task->runner_futures.defined());
-
-    TVM_PY_LOG(INFO, this->logger) << "Sending sample(s) to builder";
-    SendToBuilder(task, builder);
-    TVM_PY_LOG(INFO, this->logger) << "Sending sample(s) to runner";
-    SendToRunner(task, runner);
- 
-    if (!task->is_terminated) {
-      if (task->runner_futures.defined()) {
-        JoinRunningTask(task_id);
-      }
-      TerminateTask(task_id);
-    }
-    // task->ctx->search_strategy.value()->PostTuning();
-  }
-}
-
 
 void TaskSchedulerNode::Tune(Array<TuneContext> ctxs, Array<FloatImm> task_weights,
                              int max_trials_global, int max_trials_per_task,
@@ -348,6 +290,10 @@ void TaskSchedulerNode::PrintTuningStatistics() {
           << "Speed (GFLOPS)"
           << "Latency (us)"
           << "Weighted Latency (us)"
+          << "Mem .text [kB]"
+          << "Mem .rodata [kB]"
+          << "Const [kB]"
+          << "workspace [kB]"
           << "Trials"
           << "Done";
   p.Separator();
@@ -359,16 +305,27 @@ void TaskSchedulerNode::PrintTuningStatistics() {
         << /*flops=*/static_cast<int64_t>(task->flop)
         << /*weight=*/static_cast<int>(task->task_weight);
     double latency_ms = 1e9;
+    double text_kb = 0;
+    double rodata_kb = 0;
+    double const_kb = 0;
+    double workspace_kb = 0;
     if (!task->latency_ms.empty()) {
-      latency_ms = *std::min_element(task->latency_ms.begin(), task->latency_ms.end());
+      auto min = std::min_element(task->latency_ms.begin(), task->latency_ms.end());
+      latency_ms = *min;
+      text_kb = task->text_kb[std::distance(task->latency_ms.begin(), min)];
+      rodata_kb = task->rodata_kb[std::distance(task->latency_ms.begin(), min)];
+      const_kb = task->const_kb[std::distance(task->latency_ms.begin(), min)];
+      workspace_kb = task->workspace_kb[std::distance(task->latency_ms.begin(), min)];
     }
     if (latency_ms >= 1e9) {
-      row << /*speed=*/"N/A" << /*latency=*/"N/A" << /*weighted_latency=*/"N/A";
+      // row << /*speed=*/"N/A" << /*latency=*/"N/A" << /*weighted_latency=*/"N/A";
+      row << /*speed=*/"N/A" << /*latency=*/"N/A" << /*weighted_latency=*/"N/A" << /*text_kb*/"N/A" << /*rodata_kb*/"N/A" << /*const_kb*/"N/A" << /*workspace_kb*/"N/A";
     } else {
       latency_ms *= 1000.0;
       double speed = task->flop / latency_ms / 1000.0;
       double weighted_latency = latency_ms * task->task_weight;
-      row << /*speed=*/speed << /*latency=*/latency_ms << /*weighted_latency=*/weighted_latency;
+      // row << /*speed=*/speed << /*latency=*/latency_ms << /*weighted_latency=*/weighted_latency;
+      row << /*speed=*/speed << /*latency=*/latency_ms << /*weighted_latency=*/weighted_latency << /*text_kb=*/text_kb << /*rodata_kb*/rodata_kb << /*const_kb*/const_kb << /*workspace_kb*/workspace_kb;
       total_latency += weighted_latency;
       total_trials += trials;
     }
@@ -437,13 +394,10 @@ void PyTaskSchedulerNode::Tune(Array<TuneContext> tasks, Array<FloatImm> task_we
 TVM_REGISTER_NODE_TYPE(TaskRecordNode);
 TVM_REGISTER_OBJECT_TYPE(TaskSchedulerNode);
 TVM_REGISTER_NODE_TYPE(PyTaskSchedulerNode);
-
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerPyTaskScheduler")
     .set_body_typed(TaskScheduler::PyTaskScheduler);
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerTune")
     .set_body_method<TaskScheduler>(&TaskSchedulerNode::Tune);
-TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerGetFuturesFromTask")
-    .set_body_method<TaskScheduler>(&TaskSchedulerNode::GetFuturesFromTask);
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerJoinRunningTask")
     .set_body_method<TaskScheduler>(&TaskSchedulerNode::JoinRunningTask);
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerNextTaskId")

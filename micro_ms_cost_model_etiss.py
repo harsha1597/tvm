@@ -22,7 +22,7 @@ from datetime import datetime
 from pathlib import Path
 from types import MappingProxyType
 from typing import Optional, Callable
-
+import pickle
 import numpy as np
 
 import tvm
@@ -39,22 +39,22 @@ from tvm.meta_schedule.logging import get_logger
 from tvm import transform
 from tvm.contrib.micro.meta_schedule.local_builder_micro import get_local_builder_micro
 from tvm.contrib.micro.meta_schedule.rpc_runner_micro import get_rpc_runner_micro
-
+from tvm.rpc import connect_tracker
 from model_info import get_model_info
 
 
-logging.basicConfig(level=logging.ERROR)
-get_logger("xgb_model").setLevel(logging.ERROR)
+logging.basicConfig(level=logging.DEBUG)
+get_logger("xgb_model").setLevel(logging.DEBUG)
 
 DIR = Path(__file__).parent.resolve()
 BASE_DIR = DIR.parent
 
-GCC_PREFIX = os.environ.get("GCC_PREFIX", "/work/git/mlonmcu/mlonmcu/workspace_default/deps/install/riscv_gcc_2024.09.03_gcc14")
+GCC_PREFIX = os.environ.get("GCC_PREFIX", "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/install/riscv_gcc_rv32")
 GCC_NAME = os.environ.get("GCC_NAME", "riscv32-unknown-elf")
-LLVM_DIR = os.environ.get("LLVM_DIR", "/work/git/mlonmcu/mlonmcu/workspace_default/deps/install/llvm")
-ETISS_TEMPLATE = os.environ.get("ETISS_TEMPLATE", BASE_DIR / "microtvm-etiss-template")
-ETISS_SCRIPT = os.environ.get("ETISS_SCRIPT", BASE_DIR / "etiss/build/install/bin/run_helper.sh")
-PLATFORM = ETISS_TEMPLATE / "template_project"
+LLVM_DIR = os.environ.get("LLVM_DIR", "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/install/llvm")
+ETISS_TEMPLATE =  "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/microtvm-etiss-template"
+ETISS_SCRIPT = os.environ.get("ETISS_SCRIPT", "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/install/etiss/bin/run_helper.sh")
+PLATFORM = os.path.join(ETISS_TEMPLATE, "template_project")
 
 
 def load_model(model):
@@ -143,33 +143,6 @@ def _schedule_dummy():
     return schedule_fn
 
 
-ALTER_OP = True
-TOOLCHAIN = "gcc"
-TARGET = "c -num-cores 1"
-NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 50, 1000000)
-TASK_FILTER = [0, 1]
-MODULE_EQUALITY = "ignore-ndarray"
-TRANSFORM_LAYOUT = False
-
-OPTIONS = {
-    "verbose": True,
-    "quiet": True,
-    "gcc_prefix": str(GCC_PREFIX),
-    "gcc_name": GCC_NAME,
-    "llvm_dir": str(LLVM_DIR),
-    "etiss_script": str(ETISS_SCRIPT),
-    "etiss_args": "",
-    "arch": "rv32gc_zicsr_zifencei",
-    "abi": "ilp32d",
-    "cpu_arch": "RV32IMACFD",
-    "cpu_freq": 100000000,
-    "toolchain": TOOLCHAIN,
-}
-
-MS_DISPATCH = 1  # silent?
-# MS_DISPATCH = 2  # verbose
-# MS_DISPATCH = ?  # error
-SKIP_TUNING = False
 
 def test_micro_tuning_with_meta_schedule(platform, alter_op, target, num_trials_per_iter, max_trials_per_task, max_trials_global, module_equality, model, transform_layout, options, task_filter):
     opt_level = 3
@@ -182,7 +155,278 @@ def test_micro_tuning_with_meta_schedule(platform, alter_op, target, num_trials_
 
     KEEP = True
     if KEEP:
-        base_dir = Path("/tmp/base2")
+        base_dir = Path("./tune_logs/")
+        now = datetime.now()
+        ts = now.strftime("%Y%m%dT%H%M%S")
+
+        label = ts
+        work_dir_path = base_dir / label
+    else:
+        work_dir = utils.tempdir()
+        work_dir_path = work_dir.path
+    print("work_dir_path", work_dir_path)
+    mod, params, input_name, input_shape, input_dtype, data_sample = load_model(model)
+
+    if transform_layout:
+        with tvm.transform.PassContext(
+            opt_level=opt_level,
+            config=pass_config,
+            disabled_pass=disabled_pass,
+        ):
+            desired_layouts = {"qnn.conv2d": ["NCHW", "default"]}
+
+            # Convert the layout of the graph where possible.
+            seq = transform.Sequential(
+                [
+                    relay.transform.RemoveUnusedFunctions(),
+                    relay.transform.ConvertLayout(desired_layouts),
+                    relay.transform.FoldConstant(),
+                ]
+            )
+            mod = seq(mod)
+
+    link_params = True
+
+    runtime = relay.backend.Runtime("crt", {"system-lib": True})
+    executor = Executor("aot", {"link-params": link_params})
+    # This line is necessary for link-params to take effect during
+    # task extraction and relay.build(...).
+    mod = mod.with_attr("executor", executor)
+
+    builder = get_local_builder_micro()
+
+    with ms.Profiler() as profiler:
+        if not SKIP_TUNING:
+            sch_rules, postprocs, mutator_probs = get_tuning_config()
+            space = ms.space_generator.PostOrderApply(
+                sch_rules=sch_rules,
+                postprocs=postprocs,
+                mutator_probs=mutator_probs,
+            )
+            strategy = "evolutionary"
+            evaluator_config = EvaluatorConfig(
+                number=1,
+                repeat=1,
+                min_repeat_ms=0,
+                enable_cpu_cache_flush=False,
+            )
+            extractor = ms.feature_extractor.PerStoreFeature()
+            num_warmup_samples = 10
+            #cost_model = ms.cost_model.XGBModel(extractor=extractor, num_warmup_samples=num_warmup_samples)
+            cost_model = ms.cost_model.RandomModel()
+            # micro_rpc_workers = num_trials_per_iter
+            with get_rpc_runner_micro(
+                platform=platform, options=options, session_timeout_sec=120, evaluator_config=evaluator_config,
+                # serial_numbers=["micro"] * micro_rpc_workers,
+                tracker_host="127.0.0.1",
+                tracker_port=9190,
+                # max_workers=micro_rpc_workers,
+                rpc_timeout_sec=10,
+
+            ) as runner:
+                tracker = connect_tracker("127.0.0.1", 9190)
+                print("Tracker summary:\n", tracker.summary(), "\n max_trials_global: ",max_trials_global)
+
+                if max_trials_global > 0:
+                    ## tasks are induvidual functions
+                    tasks, task_weights = ms.relay_integration.extracted_tasks_to_tune_contexts(
+                        extracted_tasks=ms.relay_integration.extract_tasks(
+                            mod,
+                            target,
+                            params,
+                            opt_level=opt_level,
+                            module_equality=module_equality,
+                            pass_config=pass_config,
+                            disabled_pass=disabled_pass,
+                        ),
+                        work_dir=str(work_dir_path),
+                        space=space,
+                        strategy=strategy,
+                        num_tuning_cores=1,
+                    )
+                    if task_filter is not None:
+                        assert isinstance(task_filter, list)
+                        assert len(task_filter) > 0
+                        tasks = [tasks[i] for i in task_filter]
+                        task_weights = [task_weights[i] for i in task_filter]
+                    pass_config = dict(pass_config)
+                    with transform.PassContext(
+                        opt_level=opt_level,
+                        config=pass_config,
+                        disabled_pass=disabled_pass,
+                    ):
+                        db: ms.Database = ms.tune.tune_tasks(
+                            tasks=tasks,
+                            task_weights=task_weights,
+                            work_dir=str(work_dir_path),
+                            max_trials_global=max_trials_global,
+                            max_trials_per_task=max_trials_per_task,
+                            num_trials_per_iter=num_trials_per_iter,
+                            builder=builder,
+                            runner=runner,
+                            cost_model=cost_model,
+                            module_equality=module_equality,
+                        )
+                else:
+                    print("Failed, _schedule_dummy")
+                    # db = ms.database.MemoryDatabase()
+                    db = ms.database.ScheduleFnDatabase(
+                        _schedule_dummy()
+                    )
+    return db
+
+            #  Build model using meta_schedule logs
+    #         ms_mod: tvm.runtime.Module = ms.relay_integration.compile_relay(
+    #             database=db,
+    #             mod=mod,
+    #             target=target,
+    #             params=params,
+    #             pass_config=MappingProxyType(
+    #                 {
+    #                     **pass_config,
+    #                     "relay.backend.use_meta_schedule": True,
+    #                     "relay.backend.tir_converter": "default",
+    #                     "relay.backend.use_meta_schedule_dispatch": MS_DISPATCH,
+    #                 }
+    #             ),
+    #             disabled_pass=disabled_pass,
+    #             executor=executor,
+    #             runtime=runtime,
+    #         )
+    # print("tasks[0]", tasks[0], dir(tasks[0]))
+    # print("tasks[0]", tasks[0].mod)
+    # print(profiler.table())
+    # print("cost_model", cost_model, dir(cost_model))
+    # saved_model_path = work_dir_path / "cost_model.tar"
+    # # random_state = model.extractor.random_state
+    # cost_model.save(str(saved_model_path))
+    # cost_model.load(str(saved_model_path))
+    # cost_model.num_warmup_samples = 1  # Do not get random predictions
+    # # model.extractor.random_state = random_state
+    # # candidate = MeasureCandidate(Schedule(FullModule), [])
+    # dummy_preds = []
+    # record_preds = []
+    # for i in range(len(tasks)):
+    #     tune_ctx = tasks[i]
+    #     print("tune_ctx", tune_ctx, dir(tune_ctx))
+    #     sched = tir.Schedule(tune_ctx.mod)
+    #     print("sched", sched)
+    #     # dummy_candidate = _make_candidate(sched)
+    #     dummy_candidate = ms.MeasureCandidate(sch=sched, args_info=[])
+    #     print("dummy_candidate", dummy_candidate)
+    #     (dummy_feature,) = extractor.extract_from(
+    #         tune_ctx,
+    #         candidates=[dummy_candidate],
+    #     )
+    #     print("dummy_feature", dummy_feature, dir(dummy_feature))
+    #     dummy_predictions = cost_model.predict(tune_ctx, [dummy_candidate])
+    #     dummy_preds.append(dummy_predictions[0])
+    #     print("dummy_predictions", dummy_predictions)
+    #     workload = db.commit_workload(tasks[i].mod)
+    #     records = db.get_top_k(workload, 3)
+    #     print("records", records, len(records))
+    #     if len(records) == 0:
+    #         continue
+    #     record = records[0]
+    #     print("record", record, dir(record))
+    #     db.commit_tuning_record(record)
+    #     record_trace = record.trace
+    #     print("record_trace", record_trace, dir(record_trace))
+    #     record_sched = tir.Schedule(record.workload.mod)
+    #     print("record_sched_init", record_sched, dir(record_sched))
+    #     record_trace.apply_to_schedule(record_sched, remove_postproc=False)
+    #     print("record_sched", record_sched, dir(record_sched))
+    #     record_candidate = ms.MeasureCandidate(sch=record_sched, args_info=[])
+    #     print("record_candidate", record_candidate)
+    #     (record_feature,) = extractor.extract_from(
+    #         tune_ctx,
+    #         candidates=[record_candidate],
+    #     )
+    #     print("record_feature", record_feature, dir(record_feature))
+    #     record_predictions = cost_model.predict(tune_ctx, [record_candidate])
+    #     print("record_predictions", record_predictions)
+    #     # assert len(record_predictions) == 1
+    #     record_preds.append(record_predictions[0])
+    # print("dummy_preds", dummy_preds)
+    # sorted_dummy_idxs = list(np.argsort(dummy_preds))
+    # print("sorted_dummy_idxs", sorted_dummy_idxs)
+    # sorted_dummy_preds = [dummy_preds[i] for i in sorted_dummy_idxs]
+    # print("sorted_dummy_preds", sorted_dummy_preds)
+    # dummy_preds_sum = sum(dummy_preds)
+    # print("dummy_preds_sum", dummy_preds_sum)
+    # print("record_preds", record_preds)
+    # sorted_record_idxs = list(np.argsort(record_preds))
+    # print("sorted_record_idxs", sorted_record_idxs)
+    # sorted_record_preds = [record_preds[i] for i in sorted_record_idxs]
+    # print("sorted_record_preds", sorted_record_preds)
+    # record_preds_sum = sum(record_preds)
+    # print("record_preds_sum", record_preds_sum)
+    # # TODO: weighted sum!
+    # input("!!!")
+    # non_ms_mod: tvm.runtime.Module = ms.relay_integration.compile_relay(
+    #     None,
+    #     mod=mod,
+    #     target=target,
+    #     params=params,
+    #     pass_config=MappingProxyType(
+    #         {
+    #             **pass_config,
+    #             "relay.backend.use_meta_schedule_dispatch": MS_DISPATCH,
+    #         }
+    #     ),
+    #     disabled_pass=disabled_pass,
+    #     executor=executor,
+    #     runtime=runtime,
+    # )
+
+    # if not SKIP_TUNING:
+    #     # TUNED
+    #     # TODO: wrap in helper
+    #     project = tvm.micro.generate_project(
+    #         str(platform),
+    #         ms_mod,
+    #         str(work_dir_path / "project"),
+    #         options=options,
+    #     )
+    #     project.build()
+    #     project.flash()
+    #     with tvm.micro.Session(project.transport()) as session:
+    #         aot_executor = tvm.runtime.executor.aot_executor.AotModule(session.create_aot_executor())
+    #         result = aot_executor.module.time_evaluator("run", session.device, number=1)()
+    #         print("result", result)
+    #         print("mean: ", result.mean)
+
+    # # UNTUNED
+    # project = tvm.micro.generate_project(
+    #     str(platform),
+    #     non_ms_mod,
+    #     str(work_dir_path / "project2"),
+    #     options=options,
+    # )
+    # project.build()
+    # project.flash()
+    # with tvm.micro.Session(project.transport()) as session:
+    #     aot_executor = tvm.runtime.executor.aot_executor.AotModule(session.create_aot_executor())
+    #     result2 = aot_executor.module.time_evaluator("run", session.device, number=1)()
+    #     print("result2", result2)
+    #     print("mean2:", result2.mean)
+    # if not SKIP_TUNING:
+    #     rel = result.mean / result2.mean
+    #     print("rel:  ", rel)
+
+
+def test_etiss_benchmarking(platform, alter_op, target, num_trials_per_iter, max_trials_per_task, max_trials_global, module_equality, model, transform_layout, options, task_filter):
+    opt_level = 3
+    pass_config = {
+        "tir.disable_vectorize": True,
+    }
+    disabled_pass = []
+    if not alter_op:
+        disabled_pass += ["AlterOpLayout"]
+
+    KEEP = True
+    if KEEP:
+        base_dir = Path("./tune_logs/")
         now = datetime.now()
         ts = now.strftime("%Y%m%dT%H%M%S")
 
@@ -244,12 +488,15 @@ def test_micro_tuning_with_meta_schedule(platform, alter_op, target, num_trials_
             with get_rpc_runner_micro(
                 platform=platform, options=options, session_timeout_sec=120, evaluator_config=evaluator_config,
                 # serial_numbers=["micro"] * micro_rpc_workers,
-                # tracker_host="127.0.0.1",
-                # tracker_port=9190,
+                tracker_host="127.0.0.1",
+                tracker_port=9190,
                 # max_workers=micro_rpc_workers,
                 rpc_timeout_sec=10,
 
             ) as runner:
+                tracker = connect_tracker("127.0.0.1", 9190)
+                print("Tracker summary:\n", tracker.summary(), "\n max_trials_global: ",max_trials_global)
+
                 if max_trials_global > 0:
                     ## tasks are induvidual functions
                     tasks, task_weights = ms.relay_integration.extracted_tasks_to_tune_contexts(
@@ -278,166 +525,82 @@ def test_micro_tuning_with_meta_schedule(platform, alter_op, target, num_trials_
                         config=pass_config,
                         disabled_pass=disabled_pass,
                     ):
-                        db: ms.Database = ms.tune.tune_tasks(
+
+                        db: ms.Database = ms.tune.get_futures(
                             tasks=tasks,
                             task_weights=task_weights,
                             work_dir=str(work_dir_path),
-                            max_trials_global=max_trials_global,
-                            max_trials_per_task=max_trials_per_task,
-                            num_trials_per_iter=num_trials_per_iter,
                             builder=builder,
                             runner=runner,
-                            cost_model=cost_model,
                             module_equality=module_equality,
                         )
                 else:
+                    print("Failed, _schedule_dummy")
                     # db = ms.database.MemoryDatabase()
                     db = ms.database.ScheduleFnDatabase(
                         _schedule_dummy()
                     )
+    
+    return db
 
-            #  Build model using meta_schedule logs
-            ms_mod: tvm.runtime.Module = ms.relay_integration.compile_relay(
-                database=db,
-                mod=mod,
-                target=target,
-                params=params,
-                pass_config=MappingProxyType(
-                    {
-                        **pass_config,
-                        "relay.backend.use_meta_schedule": True,
-                        "relay.backend.tir_converter": "default",
-                        "relay.backend.use_meta_schedule_dispatch": MS_DISPATCH,
-                    }
-                ),
-                disabled_pass=disabled_pass,
-                executor=executor,
-                runtime=runtime,
-            )
-    # print("tasks[0]", tasks[0], dir(tasks[0]))
-    # print("tasks[0]", tasks[0].mod)
-    print(profiler.table())
-    print("cost_model", cost_model, dir(cost_model))
-    saved_model_path = work_dir_path / "cost_model.tar"
-    # random_state = model.extractor.random_state
-    cost_model.save(str(saved_model_path))
-    cost_model.load(str(saved_model_path))
-    cost_model.num_warmup_samples = 1  # Do not get random predictions
-    # model.extractor.random_state = random_state
-    # candidate = MeasureCandidate(Schedule(FullModule), [])
-    dummy_preds = []
-    record_preds = []
-    for i in range(len(tasks)):
-        tune_ctx = tasks[i]
-        print("tune_ctx", tune_ctx, dir(tune_ctx))
-        sched = tir.Schedule(tune_ctx.mod)
-        print("sched", sched)
-        # dummy_candidate = _make_candidate(sched)
-        dummy_candidate = ms.MeasureCandidate(sch=sched, args_info=[])
-        print("dummy_candidate", dummy_candidate)
-        (dummy_feature,) = extractor.extract_from(
-            tune_ctx,
-            candidates=[dummy_candidate],
-        )
-        print("dummy_feature", dummy_feature, dir(dummy_feature))
-        dummy_predictions = cost_model.predict(tune_ctx, [dummy_candidate])
-        dummy_preds.append(dummy_predictions[0])
-        print("dummy_predictions", dummy_predictions)
-        workload = db.commit_workload(tasks[i].mod)
-        records = db.get_top_k(workload, 3)
-        print("records", records, len(records))
-        if len(records) == 0:
-            continue
-        record = records[0]
-        print("record", record, dir(record))
-        db.commit_tuning_record(record)
-        record_trace = record.trace
-        print("record_trace", record_trace, dir(record_trace))
-        record_sched = tir.Schedule(record.workload.mod)
-        print("record_sched_init", record_sched, dir(record_sched))
-        record_trace.apply_to_schedule(record_sched, remove_postproc=False)
-        print("record_sched", record_sched, dir(record_sched))
-        record_candidate = ms.MeasureCandidate(sch=record_sched, args_info=[])
-        print("record_candidate", record_candidate)
-        (record_feature,) = extractor.extract_from(
-            tune_ctx,
-            candidates=[record_candidate],
-        )
-        print("record_feature", record_feature, dir(record_feature))
-        record_predictions = cost_model.predict(tune_ctx, [record_candidate])
-        print("record_predictions", record_predictions)
-        # assert len(record_predictions) == 1
-        record_preds.append(record_predictions[0])
-    print("dummy_preds", dummy_preds)
-    sorted_dummy_idxs = list(np.argsort(dummy_preds))
-    print("sorted_dummy_idxs", sorted_dummy_idxs)
-    sorted_dummy_preds = [dummy_preds[i] for i in sorted_dummy_idxs]
-    print("sorted_dummy_preds", sorted_dummy_preds)
-    dummy_preds_sum = sum(dummy_preds)
-    print("dummy_preds_sum", dummy_preds_sum)
-    print("record_preds", record_preds)
-    sorted_record_idxs = list(np.argsort(record_preds))
-    print("sorted_record_idxs", sorted_record_idxs)
-    sorted_record_preds = [record_preds[i] for i in sorted_record_idxs]
-    print("sorted_record_preds", sorted_record_preds)
-    record_preds_sum = sum(record_preds)
-    print("record_preds_sum", record_preds_sum)
-    # TODO: weighted sum!
-    input("!!!")
-    non_ms_mod: tvm.runtime.Module = ms.relay_integration.compile_relay(
-        None,
-        mod=mod,
-        target=target,
-        params=params,
-        pass_config=MappingProxyType(
-            {
-                **pass_config,
-                "relay.backend.use_meta_schedule_dispatch": MS_DISPATCH,
-            }
-        ),
-        disabled_pass=disabled_pass,
-        executor=executor,
-        runtime=runtime,
-    )
-
-    if not SKIP_TUNING:
-        # TUNED
-        # TODO: wrap in helper
-        project = tvm.micro.generate_project(
-            str(platform),
-            ms_mod,
-            str(work_dir_path / "project"),
-            options=options,
-        )
-        project.build()
-        project.flash()
-        with tvm.micro.Session(project.transport()) as session:
-            aot_executor = tvm.runtime.executor.aot_executor.AotModule(session.create_aot_executor())
-            result = aot_executor.module.time_evaluator("run", session.device, number=1)()
-            print("result", result)
-            print("mean: ", result.mean)
-
-    # UNTUNED
-    project = tvm.micro.generate_project(
-        str(platform),
-        non_ms_mod,
-        str(work_dir_path / "project2"),
-        options=options,
-    )
-    project.build()
-    project.flash()
-    with tvm.micro.Session(project.transport()) as session:
-        aot_executor = tvm.runtime.executor.aot_executor.AotModule(session.create_aot_executor())
-        result2 = aot_executor.module.time_evaluator("run", session.device, number=1)()
-        print("result2", result2)
-        print("mean2:", result2.mean)
-    if not SKIP_TUNING:
-        rel = result.mean / result2.mean
-        print("rel:  ", rel)
-
+def get_all_tflite_files(directory):
+        tflite_files = []
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".tflite"):
+                    tflite_files.append(os.path.join(root, file))
+        return tflite_files
 
 if __name__ == "__main__":
     # MODEL = "/work/git/mlonmcu/mlonmcu/workspace_default/models/resnet/resnet.tflite"
-    assert len(sys.argv) == 2, "Usage: micro_ms_cost_model_etiss.py MODEL_PATH"
-    MODEL = sys.argv[1]
-    test_micro_tuning_with_meta_schedule(PLATFORM, ALTER_OP, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+    model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
+    # MODELS = ["/mobilenet_v1_1_0_224_quant/mobilenet_v1_1_0_224_quant.tflite","/lstm2/lstm2.tflite",
+    #           "/cifar10/cifar10.tflite",""]
+    
+    
+    
+
+    # Example usage:
+    tflite_files = get_all_tflite_files(model_path)
+    
+    # print(ETISS_TEMPLATE)
+    # assert len(sys.argv) == 2, "Usage: micro_ms_cost_model_etiss.py MODEL_PATH"
+    # MODEL = sys.argv[1]
+    ALTER_OP = True
+    TOOLCHAIN = "gcc"
+    TARGET = "c -num-cores 1"
+    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 30, 1000000)
+    TASK_FILTER = list(range(10)) # Tune the top 10 highest FLOPs tasks
+    MODULE_EQUALITY = "ignore-ndarray"
+    TRANSFORM_LAYOUT = False
+
+    OPTIONS = {
+        "verbose": True,
+        "quiet": True,
+        "gcc_prefix": str(GCC_PREFIX),
+        "gcc_name": GCC_NAME,
+        "llvm_dir": str(LLVM_DIR),
+        "etiss_script": str(ETISS_SCRIPT),
+        "etiss_args": "",
+        "arch": "rv32gc_zicsr_zifencei",
+        "abi": "ilp32d",
+        "cpu_arch": "RV32IMACFD",
+        "cpu_freq": 100000000,
+        "toolchain": TOOLCHAIN,
+    }
+
+    MS_DISPATCH = 1  # silent?
+    # MS_DISPATCH = 2  # verbose
+    # MS_DISPATCH = ?  # error
+    SKIP_TUNING = False
+    #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
+    for MODEL in tflite_files:
+        try:
+            db = test_micro_tuning_with_meta_schedule(PLATFORM, ALTER_OP, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+        except NotImplementedError as e:
+            print("NotImplementedError:", MODEL)
+            continue
+
+
+    # with open("./tir_examples/db.pickle", "wb") as f:
+    #     pickle.dump(db, f)

@@ -142,7 +142,44 @@ class TaskScheduler(Object):
             database,
             cost_model,
         )
+    
+    def get_futures_from_task(
+        self,
+        tasks: List[TuneContext],
+        task_weights: List[float],
+        builder: Builder,
+        runner: Runner,
+        measure_callbacks: List[MeasureCallback],
+        database: Optional[Database],
+    ) -> None:
+        """Get futures from a list of tasks.
 
+        Parameters
+        ----------
+        tasks : List[TuneContext]
+            The list of tuning contexts as tasks.
+        task_weights : List[float]
+            The list of task weights.
+        builder : Builder
+            The builder.
+        runner : Runner
+            The runner.
+        measure_callbacks : List[MeasureCallback]
+            The list of measure callbacks.
+        database : Optional[Database]
+            The database.
+        """
+        task_weights = [float(w) for w in task_weights]
+        _ffi_api.TaskSchedulerGetFuturesFromTask(  # type: ignore # pylint: disable=no-member
+            self,
+            tasks,
+            task_weights,
+            builder,
+            runner,
+            measure_callbacks,
+            database,
+        )
+        
     def terminate_task(self, task_id: int) -> None:
         """Terminate the task
 

@@ -145,6 +145,74 @@ void TaskCleanUp(TaskRecordNode* self, int task_id, const Array<RunnerResult>& r
   self->runner_futures = NullOpt;
 }
 
+
+
+// void SendTaskToBuilder(Array<TuneContext> ctxs, const Builder& builder) {
+//   auto _ = Profiler::TimedScope("SendTaskToBuilder");
+//   // Array<MeasureCandidate> candidates = self->measure_candidates.value();
+//   int n_tasks = ctxs.size();
+//   Target target = ctxs[0]->target.value(); // Assuming all contexts have the same target
+//   Array<BuilderInput> inputs;
+//   inputs.reserve(n_tasks);
+  
+//   for (const TuneContext& ctx : ctxs) {
+    
+//     inputs.push_back(BuilderInput(ctx->mod(), target));
+//   }
+//   self->builder_results = builder->Build(inputs);
+// }
+
+
+// int max_trials_global, int max_trials_per_task,
+// int num_trials_per_iter
+
+void TaskSchedulerNode::GetFuturesFromTask(Array<TuneContext> ctxs, Array<FloatImm> task_weights, Builder builder, Runner runner,
+                             Array<MeasureCallback> measure_callbacks, Optional<Database> database) {
+
+  CHECK_EQ(ctxs.size(), task_weights.size()) << "ValueError: `task_weights` must have the same "
+                                                "length as `ctxs`";
+  int n_tasks = this->remaining_tasks_ = ctxs.size();
+  this->measure_callbacks_ = measure_callbacks;
+  this->database_ = database;
+  // this->cost_model_ = cost_model;
+  this->tasks_.clear();
+  this->tasks_.reserve(n_tasks);
+  // Run search strategy
+  for (int i = 0; i < n_tasks; ++i) {
+    const TuneContext& ctx = ctxs[i];
+    double weight = task_weights[i]->value;
+    TVM_PY_LOG(INFO, this->logger) << "Initializing Task #" << i << ": " << ctx->task_name;
+    TVM_PY_LOG(INFO, ctx->logger) << "Initializing Task #" << i << ": " << ctx->task_name;
+
+    this->tasks_.push_back(TaskRecord(ctx, weight));
+
+  }
+
+
+  for (int task_id = 0; task_id < n_tasks; ++task_id) {
+    // TVM_PY_LOG(INFO, this->logger)
+    //     << "TaskScheduler picks Task #" << task_id << ": " << tasks_[task_id]->ctx->task_name;
+
+    TaskRecordNode* task = tasks_[task_id].get();
+    ICHECK(!task->is_terminated);
+    ICHECK(!task->runner_futures.defined());
+
+    TVM_PY_LOG(INFO, this->logger) << "Sending sample(s) to builder";
+    SendToBuilder(task, builder);
+    TVM_PY_LOG(INFO, this->logger) << "Sending sample(s) to runner";
+    SendToRunner(task, runner);
+ 
+    if (!task->is_terminated) {
+      if (task->runner_futures.defined()) {
+        JoinRunningTask(task_id);
+      }
+      TerminateTask(task_id);
+    }
+    // task->ctx->search_strategy.value()->PostTuning();
+  }
+}
+
+
 void TaskSchedulerNode::Tune(Array<TuneContext> ctxs, Array<FloatImm> task_weights,
                              int max_trials_global, int max_trials_per_task,
                              int num_trials_per_iter, Builder builder, Runner runner,
@@ -369,10 +437,13 @@ void PyTaskSchedulerNode::Tune(Array<TuneContext> tasks, Array<FloatImm> task_we
 TVM_REGISTER_NODE_TYPE(TaskRecordNode);
 TVM_REGISTER_OBJECT_TYPE(TaskSchedulerNode);
 TVM_REGISTER_NODE_TYPE(PyTaskSchedulerNode);
+
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerPyTaskScheduler")
     .set_body_typed(TaskScheduler::PyTaskScheduler);
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerTune")
     .set_body_method<TaskScheduler>(&TaskSchedulerNode::Tune);
+TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerGetFuturesFromTask")
+    .set_body_method<TaskScheduler>(&TaskSchedulerNode::GetFuturesFromTask);
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerJoinRunningTask")
     .set_body_method<TaskScheduler>(&TaskSchedulerNode::JoinRunningTask);
 TVM_REGISTER_GLOBAL("meta_schedule.TaskSchedulerNextTaskId")

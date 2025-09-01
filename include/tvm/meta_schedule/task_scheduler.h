@@ -199,6 +199,9 @@ class TaskSchedulerNode : public runtime::Object {
   /*! \brief Print out a human-readable format of the tuning statistics. */
   void PrintTuningStatistics();
 
+  void GetFuturesFromTask(Array<TuneContext> ctxs, Array<FloatImm> task_weights, Builder builder, Runner runner,
+                             Array<MeasureCallback> measure_callbacks, Optional<Database> database);
+
   static constexpr const char* _type_key = "meta_schedule.TaskScheduler";
   TVM_DECLARE_BASE_OBJECT_INFO(TaskSchedulerNode, Object);
 };

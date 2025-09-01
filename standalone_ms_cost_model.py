@@ -38,11 +38,12 @@ get_logger("xgb_model").setLevel(logging.INFO)
 DIR = Path(__file__).parent.resolve()
 BASE_DIR = DIR.parent
 
-def create_cost_model():
+def create_cost_model(tree_method="auto"):
+    """tree_method: Optional[Literal["auto", "exact", "approx", "hist", "gpu_hist"]] = None,"""
     # TODO: support other extractions and models
     num_warmup_samples = 0
     extractor = ms.feature_extractor.PerStoreFeature()
-    cost_model = ms.cost_model.XGBModel(extractor=extractor, num_warmup_samples=num_warmup_samples)
+    cost_model = ms.cost_model.XGBModel(extractor=extractor, num_warmup_samples=num_warmup_samples,tree_method=tree_method)
     print("cost_model", cost_model, dir(cost_model))
     return cost_model
 
@@ -115,6 +116,7 @@ def test_cost_model(cost_model, samples):
 
 
 def load_tir(tir_path):
+    """ Returns a list of IR Mods"""
     with open(tir_path, "r") as f:
         content = f.read()
 
@@ -139,23 +141,25 @@ def load_tir(tir_path):
             except Exception as e:
                 print(f"Error replacing T.realize: {tir_source_code}")
                 raise e
+            
+        objs.append(obj)
 
             
+        # if isinstance(obj, tvm.tir.PrimFunc):
+        #     default_name = "main"
+        #     obj = tvm.IRModule({default_name: obj})
+        #     # obj = tvm.IRModule({obj.attrs["global_symbol"]: obj})
+        #     assert isinstance(obj, tvm.IRModule)
+        # yield obj
+
+    ret=[]
+    for obj in objs:
         if isinstance(obj, tvm.tir.PrimFunc):
             default_name = "main"
             obj = tvm.IRModule({default_name: obj})
-            # obj = tvm.IRModule({obj.attrs["global_symbol"]: obj})
-            assert isinstance(obj, tvm.IRModule)
-        yield obj
-
-    # ret=[]
-    # for obj in objs:
-    #     if isinstance(obj, tvm.tir.PrimFunc):
-    #         default_name = "main"
-    #         obj = tvm.IRModule({default_name: obj})
-    #     assert isinstance(obj, tvm.IRModule)
-    #     ret.append(obj)
-    # return ret
+        assert isinstance(obj, tvm.IRModule)
+        ret.append(obj)
+    return ret
 
 def benchmark_mod(ir_module):
     """

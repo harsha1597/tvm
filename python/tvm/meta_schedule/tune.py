@@ -128,3 +128,96 @@ def tune_tasks(
         cost_model=cost_model,
     )
     return database
+
+def get_futures(
+    *,
+    tasks: List[TuneContext],
+    task_weights: List[float],
+    work_dir: str,
+    builder: Builder.BuilderType = "local",
+    runner: Runner.RunnerType = "local",
+    database: Database.DatabaseType = "json",
+    measure_callbacks: MeasureCallback.CallbackListType = "default",
+    task_scheduler: TaskScheduler.TaskSchedulerType = "gradient",
+    module_equality: str = "structural",
+) -> Database:
+    """Tune a list of tasks. Using a task scheduler.
+
+    Parameters
+    ----------
+    tasks : List[TuneContext]
+        The list of tasks to tune.
+    task_weights : List[float]
+        The weight of each task.
+    work_dir : str
+        The working directory.
+    max_trials_global : int
+        The maximum number of trials to run globally.
+    max_trials_per_task : Optional[int]
+        The maximum number of trials to run per task.
+    num_trials_per_iter : int
+        The number of trials to run per iteration
+    builder : Builder.BuilderType
+        The builder.
+    runner : Runner.RunnerType
+        The runner.
+    database : Database.DatabaseType
+        The database.
+    cost_model : CostModel.CostModelType
+        The cost model.
+    measure_callbacks : MeasureCallback.CallbackListType
+        The measure callbacks.
+    task_scheduler : TaskScheduler.TaskSchedulerType
+        The task scheduler.
+    module_equality : Optional[str]
+        A string to specify the module equality testing and hashing method.
+        It must be one of the followings:
+
+            - "structural": Use StructuralEqual/Hash
+            - "ignore-ndarray": Same as "structural", but ignore ndarray raw data during equality
+                testing and hashing.
+            - "anchor-block": Apply equality testing and hashing on the anchor block extracted from
+                a given module. The "ignore-ndarray" varint is used for the extracted blocks or in
+                case no anchor block is found. For the definition of the anchor block, see
+                tir/analysis/analysis.py.
+
+    Returns
+    -------
+    database : Database
+        The database with all tuning records
+    """
+    if len(tasks) == 0:
+        raise ValueError("No tasks to tune.")
+
+    if len(tasks) != len(task_weights):
+        raise ValueError(
+            f"Length of tasks ({len(tasks)}) and task_weights ({len(task_weights)}) do not match."
+        )
+
+    num_cores = tasks[0].num_threads
+
+    
+    if not isinstance(builder, Builder):
+        builder = Builder.create(builder, max_workers=num_cores)
+    if not isinstance(runner, Runner):
+        runner = Runner.create(runner, max_workers=num_cores)
+    if database == "json":
+        database = Database.create(database, work_dir=work_dir, module_equality=module_equality)
+    elif not isinstance(database, Database):
+        database = Database.create(database, module_equality=module_equality)
+    if isinstance(measure_callbacks, MeasureCallback):
+        measure_callbacks = [measure_callbacks]
+    elif measure_callbacks == "default":
+        measure_callbacks = MeasureCallback.create(measure_callbacks)
+    if not isinstance(task_scheduler, TaskScheduler):
+        task_scheduler = TaskScheduler.create(task_scheduler)
+    
+    task_scheduler.get_futures_from_task(
+        tasks,
+        task_weights,
+        builder,
+        runner,
+        measure_callbacks,
+        database
+    )
+    return database

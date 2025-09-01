@@ -18,9 +18,8 @@
 
 import os
 import tempfile
-from typing import Optional, Dict
-import traceback
 import tvm
+from typing import Optional, Dict
 from tvm.ir import IRModule
 from tvm.runtime import NDArray
 from tvm.target import Target
@@ -30,14 +29,16 @@ from tvm import micro
 from tvm.contrib.tar import tar
 from tvm.relay.backend import Runtime
 from tvm.driver import build as tvm_build
-from tvm.tir.transform import RemoveWeightLayoutRewriteBlock
+from tvm.tir.transform import RemoveWeightLayoutRewriteBlock, InstallDebugSpans
 
 
 def get_local_builder_micro():
     """Return micro-compatible Builder for meta schedule."""
 
-    def _micro_build(mod: IRModule, target: Target, _params: Optional[Dict[str, NDArray]]) -> OperatorModule:
-        # print("_miro_build")
+    def _micro_build(
+        mod: IRModule, target: Target, _params: Optional[Dict[str, NDArray]]
+    ) -> OperatorModule:
+        # print("_micro_build")
         """Build function for micro targets.
 
         Parameters
@@ -55,32 +56,63 @@ def get_local_builder_micro():
             The built Module.
         """
 
+        # print("A")
         # Note: tvm_build assigns "global_symbol" to the name of generated C function
         # changing it is necessary for micro targets,
         # since the generated projects already include a main function.
         prim_func = mod["main"].with_attr("global_symbol", "default_function")
+        # prim_func = InstallDebugSpans()(prim_func)
+        # print("B")
         mod = IRModule({"main": prim_func})
+        # print("C")
         runtime = Runtime("crt", {"system-lib": True})
+        # print("D")
+        # mod = InstallDebugSpans()(mod)
+        # print("E")
         mod = RemoveWeightLayoutRewriteBlock(skip_ndarray_rewrite=True)(mod)
-        pass_config = {
-            "tir.disable_vectorize": True,
-        }
-        with tvm.transform.PassContext(
-            opt_level=3,
-            config=pass_config,
-            # disabled_pass=disabled_pass,
-        ):
-            try:
-                # print("try")
-                rt_mod = tvm_build(mod, target=target, runtime=runtime)
-            except Exception as ex:
-                print(ex)
-                print(traceback.format_exc())
-                input(">>>")
+        # TODO
+        # opt_level = 3
+        # config = {
+        #     "tir.disable_vectorize": True,
+        #     "tir.enable_debug": True,
+        # }
+        # disabled_pass = []
+        # with tvm.transform.PassContext(
+        #     opt_level=opt_level, config=config, disabled_pass=disabled_pass,
+        # ):
+        #     rt_mod = tvm_build(mod, target=target, runtime=runtime)
+        # rt_mod = tvm_build(mod, target=target, runtime=runtime)
+
+        const_bytes = -1
+        workspace_bytes = -1
+
+        def my_pass():
+            # print("my_pass")
+            def _transform(f, *_):
+                nonlocal const_bytes
+                nonlocal workspace_bytes
+                # print("_transform")
+                # print("f", f)
+                const_bytes = tvm.tir.analysis.calculate_constant_bytes(f, 16)
+                # print("const_bytes2", const_bytes)
+                workspace_bytes = tvm.tir.analysis.calculate_workspace_bytes(f, 16)
+                f = f.with_attr("const_bytes", const_bytes)
+                f = f.with_attr("workspace_bytes", workspace_bytes)
+                # print("workspace_bytes2", workspace_bytes)
+                return f
+            return tvm.tir.transform.prim_func_pass(_transform, opt_level=0, name="my_pass")
+        with tvm.transform.PassContext(config={"tir.add_lower_pass": [(3, my_pass())]}):
+            rt_mod = tvm_build(mod, target=target, runtime=runtime)
+        print("const_bytes3", const_bytes)
+        print("workspace_bytes3", workspace_bytes)
+        # with tvm.transform.PassContext(
+        #     opt_level=3, config={"tir.usmp.enable": True},
+        # ):
+        #     usmp_mod = tvm_build(mod, target=target, runtime=runtime)
+        #     print("usmp_mod", usmp_mod)
         return rt_mod
 
     def _micro_export(mod: OperatorModule) -> str:
-        # print("_miro_export")
         """Export function for micro targets.
 
         Parameters

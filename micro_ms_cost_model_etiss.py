@@ -39,6 +39,8 @@ from tvm.meta_schedule.logging import get_logger
 from tvm import transform
 from tvm.contrib.micro.meta_schedule.local_builder_micro import get_local_builder_micro
 from tvm.contrib.micro.meta_schedule.rpc_runner_micro import get_rpc_runner_micro
+from tvm.contrib.micro.meta_schedule.rpc_runner_micro_mem import get_rpc_runner_micro_mem
+
 from tvm.rpc import connect_tracker
 from model_info import get_model_info
 
@@ -215,7 +217,7 @@ def test_micro_tuning_with_meta_schedule(platform, alter_op, target, num_trials_
             #cost_model = ms.cost_model.XGBModel(extractor=extractor, num_warmup_samples=num_warmup_samples)
             cost_model = ms.cost_model.RandomModel()
             # micro_rpc_workers = num_trials_per_iter
-            with get_rpc_runner_micro(
+            with get_rpc_runner_micro_mem(
                 platform=platform, options=options, session_timeout_sec=120, evaluator_config=evaluator_config,
                 # serial_numbers=["micro"] * micro_rpc_workers,
                 tracker_host="127.0.0.1",
@@ -594,7 +596,9 @@ if __name__ == "__main__":
     # MS_DISPATCH = ?  # error
     SKIP_TUNING = False
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    for MODEL in tflite_files:
+    for i,MODEL in enumerate(tflite_files):
+        if i==1:
+            continue
         try:
             db = test_micro_tuning_with_meta_schedule(PLATFORM, ALTER_OP, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
         except NotImplementedError as e:

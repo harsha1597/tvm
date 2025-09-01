@@ -53,6 +53,12 @@ class TaskRecordNode : public runtime::Object {
   int run_error_count = 0;
   /*! \brief The latency of each run, in milliseconds. */
   std::vector<double> latency_ms = {};
+  std::vector<double> text_kb = {};
+  std::vector<double> rodata_kb = {};
+  std::vector<double> const_kb = {};
+
+
+  std::vector<double> workspace_kb = {};
   /*! \brief The measure candidates. */
   Optional<Array<MeasureCandidate>> measure_candidates = NullOpt;
   /*! \brief The building results. */

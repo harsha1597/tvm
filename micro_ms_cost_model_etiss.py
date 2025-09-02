@@ -39,6 +39,8 @@ from tvm.meta_schedule.logging import get_logger
 from tvm import transform
 from tvm.contrib.micro.meta_schedule.local_builder_micro import get_local_builder_micro
 from tvm.contrib.micro.meta_schedule.rpc_runner_micro import get_rpc_runner_micro
+from tvm.contrib.micro.meta_schedule.rpc_runner_micro_mem import get_rpc_runner_micro_mem
+
 from tvm.rpc import connect_tracker
 from model_info import get_model_info
 
@@ -56,6 +58,7 @@ ETISS_TEMPLATE =  "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/microtvm-eti
 ETISS_SCRIPT = os.environ.get("ETISS_SCRIPT", "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/install/etiss/bin/run_helper.sh")
 PLATFORM = os.path.join(ETISS_TEMPLATE, "template_project")
 
+import sys
 
 def load_model(model):
     def _load_model(path, shape_dict):
@@ -144,14 +147,9 @@ def _schedule_dummy():
 
 
 
-def test_micro_tuning_with_meta_schedule(platform, alter_op, target, num_trials_per_iter, max_trials_per_task, max_trials_global, module_equality, model, transform_layout, options, task_filter):
-    opt_level = 3
-    pass_config = {
-        "tir.disable_vectorize": True,
-    }
-    disabled_pass = []
-    if not alter_op:
-        disabled_pass += ["AlterOpLayout"]
+def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trials_per_iter, max_trials_per_task, max_trials_global, module_equality, model, transform_layout, options, task_filter):
+    
+    (opt_level, pass_config, disabled_pass) = opt_params 
 
     KEEP = True
     if KEEP:
@@ -556,12 +554,18 @@ if __name__ == "__main__":
     model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
     # MODELS = ["/mobilenet_v1_1_0_224_quant/mobilenet_v1_1_0_224_quant.tflite","/lstm2/lstm2.tflite",
     #           "/cifar10/cifar10.tflite",""]
-    
+    tflite_files=[ '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
+       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
+       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
+        '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
+         '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
+          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',
+           '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
     
     
 
     # Example usage:
-    tflite_files = get_all_tflite_files(model_path)
+    # tflite_files = get_all_tflite_files(model_path)
     
     # print(ETISS_TEMPLATE)
     # assert len(sys.argv) == 2, "Usage: micro_ms_cost_model_etiss.py MODEL_PATH"
@@ -588,18 +592,37 @@ if __name__ == "__main__":
         "cpu_freq": 100000000,
         "toolchain": TOOLCHAIN,
     }
-
+    
     MS_DISPATCH = 1  # silent?
     # MS_DISPATCH = 2  # verbose
     # MS_DISPATCH = ?  # error
     SKIP_TUNING = False
+
+    opt_levels = list(range(0, 4))
+    max_stack_alloca_vals = [2**k for k in range(1, 12+1)]
+
+    pass_config = {
+        "tir.disable_vectorize": True,'tir.max_stack_alloca':1024
+    }    
+    disabled_pass = ["AlterOpLayout"]
+    sys.stdout = open("tune.txt", "w")
+    sys.stderr = sys.stdout
+
+
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    for MODEL in tflite_files:
-        try:
-            db = test_micro_tuning_with_meta_schedule(PLATFORM, ALTER_OP, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
-        except NotImplementedError as e:
-            print("NotImplementedError:", MODEL)
-            continue
+    for opt in opt_levels[::-1]:
+        for max_stack_alloca in max_stack_alloca_vals:
+            pass_config['tir.max_stack_alloca'] = max_stack_alloca
+            params_config = (opt, pass_config, disabled_pass)
+            
+            for i,MODEL in enumerate(tflite_files):
+                print(params_config, MODEL)
+                
+                try:
+                    db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+                except Exception as e:
+                    print("Exception:", MODEL, e)
+                    continue
 
 
     # with open("./tir_examples/db.pickle", "wb") as f:

@@ -43,7 +43,8 @@ from tvm.contrib.micro.meta_schedule.rpc_runner_micro_mem import get_rpc_runner_
 
 from tvm.rpc import connect_tracker
 from model_info import get_model_info
-
+from sklearn.feature_selection import mutual_info_regression
+from sklearn.preprocessing import StandardScaler
 
 logging.basicConfig(level=logging.DEBUG)
 get_logger("xgb_model").setLevel(logging.DEBUG)
@@ -412,135 +413,6 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
     #     rel = result.mean / result2.mean
     #     print("rel:  ", rel)
 
-
-def test_etiss_benchmarking(platform, alter_op, target, num_trials_per_iter, max_trials_per_task, max_trials_global, module_equality, model, transform_layout, options, task_filter):
-    opt_level = 3
-    pass_config = {
-        "tir.disable_vectorize": True,
-    }
-    disabled_pass = []
-    if not alter_op:
-        disabled_pass += ["AlterOpLayout"]
-
-    KEEP = True
-    if KEEP:
-        base_dir = Path("./tune_logs/")
-        now = datetime.now()
-        ts = now.strftime("%Y%m%dT%H%M%S")
-
-        label = ts
-        work_dir_path = base_dir / label
-    else:
-        work_dir = utils.tempdir()
-        work_dir_path = work_dir.path
-    print("work_dir_path", work_dir_path)
-    mod, params, input_name, input_shape, input_dtype, data_sample = load_model(model)
-
-    if transform_layout:
-        with tvm.transform.PassContext(
-            opt_level=opt_level,
-            config=pass_config,
-            disabled_pass=disabled_pass,
-        ):
-            desired_layouts = {"qnn.conv2d": ["NCHW", "default"]}
-
-            # Convert the layout of the graph where possible.
-            seq = transform.Sequential(
-                [
-                    relay.transform.RemoveUnusedFunctions(),
-                    relay.transform.ConvertLayout(desired_layouts),
-                    relay.transform.FoldConstant(),
-                ]
-            )
-            mod = seq(mod)
-
-    link_params = True
-
-    runtime = relay.backend.Runtime("crt", {"system-lib": True})
-    executor = Executor("aot", {"link-params": link_params})
-    # This line is necessary for link-params to take effect during
-    # task extraction and relay.build(...).
-    mod = mod.with_attr("executor", executor)
-
-    builder = get_local_builder_micro()
-
-    with ms.Profiler() as profiler:
-        if not SKIP_TUNING:
-            sch_rules, postprocs, mutator_probs = get_tuning_config()
-            space = ms.space_generator.PostOrderApply(
-                sch_rules=sch_rules,
-                postprocs=postprocs,
-                mutator_probs=mutator_probs,
-            )
-            strategy = "evolutionary"
-            evaluator_config = EvaluatorConfig(
-                number=1,
-                repeat=1,
-                min_repeat_ms=0,
-                enable_cpu_cache_flush=False,
-            )
-            extractor = ms.feature_extractor.PerStoreFeature()
-            num_warmup_samples = 10
-            cost_model = ms.cost_model.XGBModel(extractor=extractor, num_warmup_samples=num_warmup_samples)
-            # micro_rpc_workers = num_trials_per_iter
-            with get_rpc_runner_micro(
-                platform=platform, options=options, session_timeout_sec=120, evaluator_config=evaluator_config,
-                # serial_numbers=["micro"] * micro_rpc_workers,
-                tracker_host="127.0.0.1",
-                tracker_port=9190,
-                # max_workers=micro_rpc_workers,
-                rpc_timeout_sec=10,
-
-            ) as runner:
-                tracker = connect_tracker("127.0.0.1", 9190)
-                print("Tracker summary:\n", tracker.summary(), "\n max_trials_global: ",max_trials_global)
-
-                if max_trials_global > 0:
-                    ## tasks are induvidual functions
-                    tasks, task_weights = ms.relay_integration.extracted_tasks_to_tune_contexts(
-                        extracted_tasks=ms.relay_integration.extract_tasks(
-                            mod,
-                            target,
-                            params,
-                            opt_level=opt_level,
-                            module_equality=module_equality,
-                            pass_config=pass_config,
-                            disabled_pass=disabled_pass,
-                        ),
-                        work_dir=str(work_dir_path),
-                        space=space,
-                        strategy=strategy,
-                        num_tuning_cores=1,
-                    )
-                    if task_filter is not None:
-                        assert isinstance(task_filter, list)
-                        assert len(task_filter) > 0
-                        tasks = [tasks[i] for i in task_filter]
-                        task_weights = [task_weights[i] for i in task_filter]
-                    pass_config = dict(pass_config)
-                    with transform.PassContext(
-                        opt_level=opt_level,
-                        config=pass_config,
-                        disabled_pass=disabled_pass,
-                    ):
-
-                        db: ms.Database = ms.tune.get_futures(
-                            tasks=tasks,
-                            task_weights=task_weights,
-                            work_dir=str(work_dir_path),
-                            builder=builder,
-                            runner=runner,
-                            module_equality=module_equality,
-                        )
-                else:
-                    print("Failed, _schedule_dummy")
-                    # db = ms.database.MemoryDatabase()
-                    db = ms.database.ScheduleFnDatabase(
-                        _schedule_dummy()
-                    )
-    
-    return db
-
 def get_all_tflite_files(directory):
         tflite_files = []
         for root, dirs, files in os.walk(directory):
@@ -548,6 +420,100 @@ def get_all_tflite_files(directory):
                 if file.endswith(".tflite"):
                     tflite_files.append(os.path.join(root, file))
         return tflite_files
+
+def transform_feats(raw_feats):
+    """ As the features have a variable size: (x,164) where x refers to the number of BufferStores in a Primfunc. We need to 
+    aggregate the features """
+    num_of_rows = raw_feats.shape[0]
+    agg = np.concatenate([
+                np.sum(raw_feats, axis=0),
+                #np.std(raw_feats, axis=0),
+                np.array(num_of_rows).reshape((1))
+                
+            ]) 
+    return agg
+
+def filter_feats(X,y):
+    """ Remove features with all 0s and low MI and standardize variables
+    returns the filtered_training data, mask, scaler to be used on test data """
+
+    # keep columns with at least one nonzero
+    mi = mutual_info_regression(X, y, random_state=42)
+    mask_nonzero = (X != 0).any(axis=0)
+
+    # Remove features with zero MI
+    mask = mi > 0
+    final_mask = mask_nonzero & mask
+    X_filtered = X[:, final_mask] if isinstance(X, np.ndarray) else X.loc[:, final_mask]
+
+    # Standardize features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X_filtered)
+
+    return X_scaled,final_mask,scaler
+
+def tuninglog_tofeats(tuning_dir):
+    # tuning_dir= "/kaggle/input/tunelogs/content/tmplogs"
+    directories = os.listdir(tuning_dir)
+    paths = [os.path.join(tuning_dir,x) for x in directories]
+    target = tvm.target.Target("c")
+    #dbs = []
+    #samples=[]
+    bad_tune=0
+    X_train=[]
+    y_train=[]
+    for path in paths:
+        tuning_records = os.path.join(path, "database_tuning_record.json")
+        workload_path = os.path.join(path, "database_workload.json")
+        db = ms.database.JSONDatabase(path_tuning_record=tuning_records, path_workload=workload_path)
+        
+        for i,rec in enumerate(db.get_all_tuning_records()):
+            
+            time=rec.run_secs
+            if(len(rec.run_secs) >1) or time[0] > 1000:
+                print(i, time, tuning_records )
+                bad_tune+=1
+                print("Ignoring this tuning record as it is corrupted")
+                continue
+                #assert False, "Assuming 1 run_sec per record"
+                
+            y_train.append(float(time[0]))
+
+            mod=rec.workload.mod
+            #samples.append((mod,time))
+            tune_ctx = ms.tune_context.TuneContext(
+                mod=mod,
+                target=target,
+                # space_generator=space,
+                # search_strategy=strategy,
+                # task_name=task_name,
+                # logger=logger,
+                # rand_state=rand_state,
+                # num_threads=num_tuning_cores,
+            )
+            #tasks.append(ctx)
+            sched = tvm.tir.Schedule(mod)
+            candidate = ms.MeasureCandidate(sch=sched, args_info=[])
+
+            extractor = ms.feature_extractor.PerStoreFeature()
+            (dummy_feature,) = extractor.extract_from(
+                tune_ctx,
+                candidates=[candidate],
+            )
+            dummy_feature = dummy_feature.numpy()
+            X_train.append(transform_feats(dummy_feature))
+    X_train = np.array(X_train)
+    y_train = np.array(y_train)
+    X_filtered,feature_mask,scaler = filter_feats(X_train,y_train)
+    print("X_filtered shape", X_filtered.shape, "y_train.shape: ", y_train.shape)
+    print("No of bad tuning samples: ", bad_tune)
+    pickle_obj = (X_filtered, y_train, feature_mask, scaler)
+    now = datetime.now()
+    ts = now.strftime("%Y%m%dT%H%M%S")
+
+    label = ts
+    with open(f"featureset_{label}.pickle", "wb") as f:
+        pickle.dump(pickle_obj, f)
 
 if __name__ == "__main__":
     # MODEL = "/work/git/mlonmcu/mlonmcu/workspace_default/models/resnet/resnet.tflite"
@@ -610,20 +576,20 @@ if __name__ == "__main__":
 
 
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    for opt in opt_levels[::-1]:
-        for max_stack_alloca in max_stack_alloca_vals:
-            pass_config['tir.max_stack_alloca'] = max_stack_alloca
-            params_config = (opt, pass_config, disabled_pass)
+    # for opt in opt_levels[::-1]:
+    #     for max_stack_alloca in max_stack_alloca_vals:
+    #         pass_config['tir.max_stack_alloca'] = max_stack_alloca
+    #         params_config = (opt, pass_config, disabled_pass)
             
-            for i,MODEL in enumerate(tflite_files):
-                print(params_config, MODEL)
+    #         for i,MODEL in enumerate(tflite_files):
+    #             print(params_config, MODEL)
                 
-                try:
-                    db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
-                except Exception as e:
-                    print("Exception:", MODEL, e)
-                    continue
-
-
+    #             try:
+    #                 db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+    #             except Exception as e:
+    #                 print("Exception:", MODEL, e)
+    #                 continue
+    tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
+    tuninglog_tofeats(tuning_log_path)
     # with open("./tir_examples/db.pickle", "wb") as f:
     #     pickle.dump(db, f)

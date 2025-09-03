@@ -1123,7 +1123,7 @@ void GetPerStoreFeature(const PrimFunc& func, int cache_line_size, int max_n_buf
 
   auto slog = log_scale ? log2p : [](float x) { return x; };
 
-  ret->push_back(extractor.buffer_features.size());
+  ret->push_back(extractor.buffer_features.size()); // First element is the number of buffers
 
   for (const auto& x : extractor.buffer_features) {
     const FeatureSet& fea_set = x.second;
@@ -1748,12 +1748,12 @@ TVM_REGISTER_GLOBAL("auto_scheduler.FeaturesFromPrimFunc")
       int64_t num_feature_rows = vec[0];  // first element is number of rows
       int64_t row_length = 0;
       if (num_feature_rows != 0) {
-        row_length = (vec.size() - 1) / num_feature_rows;
+        row_length = (vec.size() - 1) / num_feature_rows; 
       }
       auto ary =
           runtime::NDArray::Empty({num_feature_rows, row_length}, {kDLFloat, 32, 1}, {kDLCPU, 0});
       // NDArray is row major by default
-      ary.CopyFromBytes(vec.data() + 1, sizeof(float) * num_feature_rows * row_length);
+      ary.CopyFromBytes(vec.data() + 1, sizeof(float) * num_feature_rows * row_length); // Flattens all data ?
       return ary;
     });
 

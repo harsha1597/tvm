@@ -621,7 +621,7 @@ class ScheduleBuilder : public ExprVisitor {
                         f.value(), {{constant, rewritten_constant}});
                     auto workload_dummy =
                         database_.value()->CommitWorkload(backend::PrimFuncToIRModule(f_dummy));
-                    TuningRecord rec_dummy(record->trace, workload_dummy, record->run_secs,
+                    TuningRecord rec_dummy(record->trace, workload_dummy, record->mem,record->run_secs,
                                            record->target, record->args_info, record->timestamp);
                     database_.value()->CommitTuningRecord(rec_dummy);
                   } else {

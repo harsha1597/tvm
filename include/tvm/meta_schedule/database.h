@@ -117,6 +117,8 @@ class TuningRecordNode : public runtime::Object {
   tir::Trace trace;
   /*! \brief The workload. */
   Workload workload{nullptr};
+  /*! \brief The rom_code size in bytes (?) */
+  Optional<Array<FloatImm>> mem;
   /*! \brief The profiling result in seconds. */
   Optional<Array<FloatImm>> run_secs;
   /*! \brief The target for tuning. */
@@ -129,6 +131,7 @@ class TuningRecordNode : public runtime::Object {
   void VisitAttrs(tvm::AttrVisitor* v) {
     v->Visit("trace", &trace);
     v->Visit("workload", &workload);
+    v->Visit("mem", &mem);
     v->Visit("run_secs", &run_secs);
     v->Visit("target", &target);
     v->Visit("args_info", &args_info);
@@ -164,11 +167,12 @@ class TuningRecord : public runtime::ObjectRef {
    \brief Constructor of a tuning record.
    \param trace The trace of the tuning record.
    \param workload The workload of the tuning record.
+   \param mem The memory usage of the tuning record.
    \param run_secs The running time of the tuning record.
    \param target The target of the tuning record.
    \param args_info The argument information of the tuning record.
   */
-  TVM_DLL explicit TuningRecord(tir::Trace trace, Workload workload,
+  TVM_DLL explicit TuningRecord(tir::Trace trace, Workload workload,Optional<Array<FloatImm>> mem, 
                                 Optional<Array<FloatImm>> run_secs, Optional<Target> target,
                                 Optional<Array<ArgInfo>> args_info, Optional<FloatImm> timestamp);
   /*!

@@ -71,11 +71,12 @@ Workload Workload::FromJSON(const ObjectRef& json_obj) {
 
 /******** TuningRecord ********/
 
-TuningRecord::TuningRecord(tir::Trace trace, Workload workload, Optional<Array<FloatImm>> run_secs,
+TuningRecord::TuningRecord(tir::Trace trace, Workload workload,Optional<Array<FloatImm>> mem, Optional<Array<FloatImm>> run_secs,
                            Optional<Target> target, Optional<Array<ArgInfo>> args_info, Optional<FloatImm> timestamp) {
   ObjectPtr<TuningRecordNode> n = make_object<TuningRecordNode>();
   n->trace = trace;
   n->workload = workload;
+  n->mem = mem;
   n->run_secs = run_secs;
   n->target = target;
   n->args_info = args_info;
@@ -109,6 +110,7 @@ ObjectRef TuningRecordNode::AsJSON() const {
     json_target = target.value()->Export();
   }
   return Array<ObjectRef>{trace->AsJSON(false),  //
+                          mem,                   //
                           run_secs,              //
                           json_target,           //
                           json_args_info,        //
@@ -127,29 +129,43 @@ bool TuningRecordNode::IsValid() const {
       }
     }
   }
+
+  if (mem.defined()) {
+    for (const auto& mem_size : mem.value()) {
+      // kMaxMeanTime(1e10) is used as a stub for undefined mem size.
+      if (mem_size.defined() && mem_size->value != SortTuningRecordByMeanRunSecs::kMaxMeanTime) {
+        return true;
+      }
+    }
+  }
   return false;
 }
 
 TuningRecord TuningRecord::FromJSON(const ObjectRef& json_obj, const Workload& workload) {
   tir::Trace trace{nullptr};
+  Optional<Array<FloatImm>> mem{nullptr};
   Optional<Array<FloatImm>> run_secs{nullptr};
   Optional<Target> target{nullptr};
   Optional<Array<ArgInfo>> args_info{nullptr};
   Optional<FloatImm> timestamp;
   try {
     const ArrayNode* json_array = json_obj.as<ArrayNode>();
-    CHECK(json_array && json_array->size() == 5);
-    // Load json[1] => run_secs
-    if (json_array->at(1).defined()) {
-      run_secs = AsFloatArray(json_array->at(1));
+    CHECK(json_array && json_array->size() == 6); //Increased to 6 to add mem
+    // Load json[1] => mem
+     if (json_array->at(1).defined()) {
+      mem = AsFloatArray(json_array->at(1));
     }
-    // Load json[2] => target
+    // Load json[2] => run_secs
     if (json_array->at(2).defined()) {
-      target = Target(Downcast<Map<String, ObjectRef>>(json_array->at(2)));
+      run_secs = AsFloatArray(json_array->at(2));
     }
-    // Load json[3] => args_info
+    // Load json[3] => target
     if (json_array->at(3).defined()) {
-      const ArrayNode* json_args_info = json_array->at(3).as<ArrayNode>();
+      target = Target(Downcast<Map<String, ObjectRef>>(json_array->at(3)));
+    }
+    // Load json[4] => args_info
+    if (json_array->at(4).defined()) {
+      const ArrayNode* json_args_info = json_array->at(4).as<ArrayNode>();
       Array<ArgInfo> info;
       info.reserve(json_args_info->size());
       for (const ObjectRef& json_arg_info : *json_args_info) {
@@ -157,11 +173,11 @@ TuningRecord TuningRecord::FromJSON(const ObjectRef& json_obj, const Workload& w
       }
       args_info = info;
     }
-    // Load json[4] => timestamp
-    if (json_array->at(4).defined()) {
-      if (const auto* float_imm = json_array->at(4).as<FloatImmNode>()) {
+    // Load json[5] => timestamp
+    if (json_array->at(5).defined()) {
+      if (const auto* float_imm = json_array->at(5).as<FloatImmNode>()) {
         timestamp = FloatImm(DataType::Float(64), float_imm->value);
-      } else if (const auto* float_imm = json_array->at(4).as<runtime::Float::ContainerType>()) {
+      } else if (const auto* float_imm = json_array->at(5).as<runtime::Float::ContainerType>()) {
         timestamp = FloatImm(DataType::Float(64), float_imm->value);
       }
     }
@@ -178,7 +194,7 @@ TuningRecord TuningRecord::FromJSON(const ObjectRef& json_obj, const Workload& w
     LOG(FATAL) << "ValueError: Unable to parse the JSON object: " << json_obj
                << "\nThe error is: " << e.what();
   }
-  return TuningRecord(trace, workload, run_secs, target, args_info, timestamp);
+  return TuningRecord(trace, workload,mem, run_secs, target, args_info, timestamp);
 }
 
 /******** Database ********/
@@ -238,7 +254,8 @@ void DatabaseNode::DumpPruned(Database destination) {
     TuningRecord record = kv.second;
     workload = destination->CommitWorkload(workload->mod);
     destination->CommitTuningRecord(TuningRecord(/*trace=*/record->trace, /*workload=*/workload,
-                                                 /*run_secs=*/record->run_secs,
+                                                  /*mem=*/record->mem,                                           
+                                                  /*run_secs=*/record->run_secs,
                                                  /*target=*/record->target,
                                                  /*args_info=*/record->args_info,
                                                  /*timestamp=*/record->timestamp));
@@ -301,9 +318,9 @@ TVM_REGISTER_GLOBAL("meta_schedule.WorkloadAsJSON")
     .set_body_method<Workload>(&WorkloadNode::AsJSON);
 TVM_REGISTER_GLOBAL("meta_schedule.WorkloadFromJSON").set_body_typed(&Workload::FromJSON);
 TVM_REGISTER_GLOBAL("meta_schedule.TuningRecord")
-    .set_body_typed([](tir::Trace trace, Workload workload, Optional<Array<FloatImm>> run_secs,
+    .set_body_typed([](tir::Trace trace, Workload workload, Optional<Array<FloatImm>> mem, Optional<Array<FloatImm>> run_secs,
                        Optional<Target> target, Optional<Array<ArgInfo>> args_info, Optional<FloatImm> timestamp) {
-      return TuningRecord(trace, workload, run_secs, target, args_info, timestamp);
+      return TuningRecord(trace, workload, mem, run_secs, target, args_info, timestamp);
     });
 TVM_REGISTER_GLOBAL("meta_schedule.TuningRecordAsMeasureCandidate")
     .set_body_method<TuningRecord>(&TuningRecordNode::AsMeasureCandidate);

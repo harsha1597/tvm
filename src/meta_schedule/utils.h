@@ -491,6 +491,27 @@ struct SortTuningRecordByMeanRunSecs {
   }
 };
 
+struct SortTuningRecordByMeanMemSize {
+  static const constexpr double kMaxMeanSize = 1e10;
+
+  static double Mean(const Array<FloatImm>& a) {
+    if (a.empty()) {
+      return kMaxMeanSize;
+    }
+    double sum = 0.0;
+    for (const FloatImm& i : a) {
+      sum += i->value;
+    }
+    return sum / a.size();
+  }
+
+  bool operator()(const TuningRecord& a, const TuningRecord& b) const {
+    double a_time = Mean(a->mem.value_or({}));
+    double b_time = Mean(b->mem.value_or({}));
+    return a_time < b_time;
+  }
+};
+
 /*!
  * \brief The helper function to clone schedule rules, postprocessors, and mutators.
  * \param src The source space generator.

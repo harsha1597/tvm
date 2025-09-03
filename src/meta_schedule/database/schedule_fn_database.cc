@@ -40,6 +40,7 @@ class ScheduleFnDatabaseNode : public DatabaseNode {
     if (Optional<tir::Schedule> sch = this->QuerySchedule(mod, target, workload_name)) {
       return TuningRecord(sch.value()->trace().value(),
                           /*workload=*/Workload(mod, 0),  //
+                          /*mem=*/NullOpt,           //
                           /*run_secs=*/NullOpt,           //
                           /*target=*/target,              //
                           /*arg_info=*/NullOpt,           //

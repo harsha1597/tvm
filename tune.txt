@@ -1,1 +1,67 @@
-X_filtered shape (2916, 194) y_train.shape:  (2916,)
+(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
+work_dir_path tune_logs/20250907T181003
+Tracker summary:
+ {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
+ max_trials_global:  1000000
+2025-09-07 18:10:13 [INFO] Logging directory: tune_logs/20250907T181003/logs
+Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite list index out of range
+(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
+work_dir_path tune_logs/20250907T181021
+2025-09-07 18:10:21 [INFO] LocalBuilder: max_workers = 4
+Tracker summary:
+ {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
+ max_trials_global:  1000000
+2025-09-07 18:10:47 [INFO] Logging directory: tune_logs/20250907T181021/logs
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_cast_subtract"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_1"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_conv2d_add_fixed_point_multiply_add_clip_cast_subtract"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_2"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_3"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_conv2d_add_fixed_point_multiply_add_clip_cast"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_cast_subtract_1"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_4"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_5"
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:393] 
+ ID |                                                            Name |     FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                             fused_cast_subtract |   150528 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  1 |              fused_nn_conv2d_add_fixed_point_multiply_clip_cast | 34320384 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  2 |            fused_nn_conv2d_add_fixed_point_multiply_clip_cast_1 | 12644352 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_add_clip_cast_subtract | 30406656 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  4 |            fused_nn_conv2d_add_fixed_point_multiply_clip_cast_2 | 92123136 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  5 |            fused_nn_conv2d_add_fixed_point_multiply_clip_cast_3 |  9483264 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  6 |          fused_nn_conv2d_add_fixed_point_multiply_add_clip_cast | 29302784 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  7 |                                           fused_cast_subtract_1 |   100352 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  8 |            fused_nn_conv2d_add_fixed_point_multiply_clip_cast_4 | 40341504 |      1 |            N/A |          N/A |                   N/A |      0 |      
+  9 |            fused_nn_conv2d_add_fixed_point_multiply_clip_cast_5 | 12644352 |      1 |            N/A |          N/A |                   N/A |      0 |      
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 0
+Total latency (us): 0
+
+2025-09-07 18:10:48 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_cast_subtract"
+2025-09-07 18:10:50 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
+2025-09-07 18:10:51 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
+2025-09-07 18:10:51 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast"
+2025-09-07 18:11:30 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
+2025-09-07 18:11:34 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
+2025-09-07 18:11:34 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_1"
+2025-09-07 18:12:08 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
+2025-09-07 18:12:11 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
+2025-09-07 18:12:11 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_conv2d_add_fixed_point_multiply_add_clip_cast_subtract"
+2025-09-07 18:12:25 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
+2025-09-07 18:12:28 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
+2025-09-07 18:12:28 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_2"
+2025-09-07 18:12:40 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
+2025-09-07 18:12:43 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
+2025-09-07 18:12:43 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #5: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_3"
+2025-09-07 18:13:21 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
+2025-09-07 18:13:24 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
+2025-09-07 18:13:24 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #6: "fused_nn_conv2d_add_fixed_point_multiply_add_clip_cast"
+2025-09-07 18:13:37 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
+2025-09-07 18:13:42 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
+2025-09-07 18:13:42 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #7: "fused_cast_subtract_1"
+2025-09-07 18:13:44 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
+2025-09-07 18:13:46 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
+2025-09-07 18:13:46 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #8: "fused_nn_conv2d_add_fixed_point_multiply_clip_cast_4"
+2025-09-07 18:13:57 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder

@@ -546,7 +546,7 @@ if __name__ == "__main__":
 
     OPTIONS = {
         "verbose": True,
-        "quiet": True,
+        "quiet": False,
         "gcc_prefix": str(GCC_PREFIX),
         "gcc_name": GCC_NAME,
         "llvm_dir": str(LLVM_DIR),
@@ -557,6 +557,9 @@ if __name__ == "__main__":
         "cpu_arch": "RV32IMACFD",
         "cpu_freq": 100000000,
         "toolchain": TOOLCHAIN,
+        "opt":2,
+        "gc":0,
+        "lto":1
     }
     
     MS_DISPATCH = 1  # silent?
@@ -576,20 +579,20 @@ if __name__ == "__main__":
 
 
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    # for opt in opt_levels[::-1]:
-    #     for max_stack_alloca in max_stack_alloca_vals:
-    #         pass_config['tir.max_stack_alloca'] = max_stack_alloca
-    #         params_config = (opt, pass_config, disabled_pass)
+    for opt in opt_levels[::-1]:
+        for max_stack_alloca in max_stack_alloca_vals:
+            pass_config['tir.max_stack_alloca'] = max_stack_alloca
+            params_config = (opt, pass_config, disabled_pass)
             
-    #         for i,MODEL in enumerate(tflite_files):
-    #             print(params_config, MODEL)
+            for i,MODEL in enumerate(tflite_files):
+                print(params_config, MODEL)
                 
-    #             try:
-    #                 db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
-    #             except Exception as e:
-    #                 print("Exception:", MODEL, e)
-    #                 continue
-    tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
-    tuninglog_tofeats(tuning_log_path)
+                try:
+                    db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+                except Exception as e:
+                    print("Exception:", MODEL, e)
+                    continue
+    # tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
+    # tuninglog_tofeats(tuning_log_path)
     # with open("./tir_examples/db.pickle", "wb") as f:
     #     pickle.dump(db, f)

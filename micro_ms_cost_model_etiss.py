@@ -164,6 +164,7 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
         work_dir = utils.tempdir()
         work_dir_path = work_dir.path
     print("work_dir_path", work_dir_path)
+    
     mod, params, input_name, input_shape, input_dtype, data_sample = load_model(model)
 
     if transform_layout:
@@ -272,6 +273,8 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
                     db = ms.database.ScheduleFnDatabase(
                         _schedule_dummy()
                     )
+    with open(work_dir_path / "options.json", "w") as f:
+        f.write(str(options))
     return db
 
             #  Build model using meta_schedule logs
@@ -520,18 +523,18 @@ if __name__ == "__main__":
     model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
     # MODELS = ["/mobilenet_v1_1_0_224_quant/mobilenet_v1_1_0_224_quant.tflite","/lstm2/lstm2.tflite",
     #           "/cifar10/cifar10.tflite",""]
-    tflite_files=[ '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
-       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
-       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
-        '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
-         '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
-          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',
-           '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
+    # tflite_files=[ '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
+    #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
+    #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
+    #     '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
+    #      '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
+    #       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',
+    #        '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
     
     
 
     # Example usage:
-    # tflite_files = get_all_tflite_files(model_path)
+    tflite_files = get_all_tflite_files(model_path)
     
     # print(ETISS_TEMPLATE)
     # assert len(sys.argv) == 2, "Usage: micro_ms_cost_model_etiss.py MODEL_PATH"
@@ -539,14 +542,14 @@ if __name__ == "__main__":
     ALTER_OP = True
     TOOLCHAIN = "gcc"
     TARGET = "c -num-cores 1"
-    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 30, 1000000)
-    TASK_FILTER = list(range(10)) # Tune the top 10 highest FLOPs tasks
+    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 10, 1000000)
+    TASK_FILTER = list(range(5)) # Tune the top 10 highest FLOPs tasks
     MODULE_EQUALITY = "ignore-ndarray"
     TRANSFORM_LAYOUT = False
 
     OPTIONS = {
         "verbose": True,
-        "quiet": False,
+        "quiet": True,
         "gcc_prefix": str(GCC_PREFIX),
         "gcc_name": GCC_NAME,
         "llvm_dir": str(LLVM_DIR),
@@ -556,9 +559,9 @@ if __name__ == "__main__":
         "abi": "ilp32d",
         "cpu_arch": "RV32IMACFD",
         "cpu_freq": 100000000,
-        "toolchain": TOOLCHAIN,
+        "toolchain": "llvm",#TOOLCHAIN,
         "opt":2,
-        "gc":0,
+        "gc":1,
         "lto":1
     }
     
@@ -567,7 +570,10 @@ if __name__ == "__main__":
     # MS_DISPATCH = ?  # error
     SKIP_TUNING = False
 
-    opt_levels = list(range(0, 4))
+    sw_opt=list(range(1,4))
+    gc=[0,1]
+    lto=[0,1]
+    opt_levels = list(range(1, 4))
     max_stack_alloca_vals = [2**k for k in range(1, 12+1)]
 
     pass_config = {
@@ -579,20 +585,29 @@ if __name__ == "__main__":
 
 
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    for opt in opt_levels[::-1]:
-        for max_stack_alloca in max_stack_alloca_vals:
-            pass_config['tir.max_stack_alloca'] = max_stack_alloca
-            params_config = (opt, pass_config, disabled_pass)
-            
-            for i,MODEL in enumerate(tflite_files):
-                print(params_config, MODEL)
-                
-                try:
-                    db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
-                except Exception as e:
-                    print("Exception:", MODEL, e)
-                    continue
-    # tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
-    # tuninglog_tofeats(tuning_log_path)
-    # with open("./tir_examples/db.pickle", "wb") as f:
-    #     pickle.dump(db, f)
+    for toolchain in ["gcc","llvm"]:
+        OPTIONS["toolchain"] = toolchain
+        for sw in sw_opt:
+            OPTIONS["opt"] = sw
+            for g in gc:
+                OPTIONS["gc"] = g
+                for l in lto:
+                    OPTIONS["lto"] = l
+                    print("OPTIONS", OPTIONS)
+                    for opt in opt_levels[::-1]:
+                        for max_stack_alloca in max_stack_alloca_vals:
+                            pass_config['tir.max_stack_alloca'] = max_stack_alloca
+                            params_config = (opt, pass_config, disabled_pass)
+                            
+                            for i,MODEL in enumerate(tflite_files[::-1]):
+                                print(params_config, MODEL)
+                                
+                                try:
+                                    db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+                                except Exception as e:
+                                    print("Exception:", MODEL, e)
+                                    continue
+                    # tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
+                    # tuninglog_tofeats(tuning_log_path)
+                    # with open("./tir_examples/db.pickle", "wb") as f:
+                    #     pickle.dump(db, f)

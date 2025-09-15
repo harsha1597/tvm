@@ -305,7 +305,7 @@ if __name__ == "__main__":
     # assert len(sys.argv) == 2, "Usage: micro_ms_cost_model_etiss.py MODEL_PATH"
     # MODEL = sys.argv[1]
     ALTER_OP = True
-    TOOLCHAIN = "gcc"
+    TOOLCHAIN = "llvm"
     TARGET = "c -num-cores 1"
     NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 30, 1000000)
     TASK_FILTER = list(range(10)) # Tune the top 10 highest FLOPs tasks
@@ -313,7 +313,7 @@ if __name__ == "__main__":
     TRANSFORM_LAYOUT = False
 
     OPTIONS = {
-        "verbose": True,
+        "verbose": False,
         "quiet": True,
         "gcc_prefix": str(GCC_PREFIX),
         "gcc_name": GCC_NAME,

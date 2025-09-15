@@ -589,9 +589,9 @@ def _export_operator_model_library_format(mod: build_module.OperatorModule, temp
     const_bytes = -2
     workspace_bytes = -2
     try:
-        print("f", f)
-        print("dir(f)", dir(f))
-        print("f.attrs", type(f.attrs), f.attrs)
+        # print("f", f)
+        # print("dir(f)", dir(f))
+        # print("f.attrs", type(f.attrs), f.attrs)
         if "const_bytes" in f.attrs:
             const_bytes = f.attrs["const_bytes"].value
         if "workspace_bytes" in f.attrs:
@@ -614,16 +614,16 @@ def _export_operator_model_library_format(mod: build_module.OperatorModule, temp
         "const_bytes": const_bytes,
         "workspace_bytes": workspace_bytes,
     }
-    print("md", metadata)
+    # print("md", metadata)
     try:
         with open(tempdir / METADATA_FILE, "w") as metadata_f:
-            print("0")
+            # print("0")
             json.dump(metadata, metadata_f)
             print("tempdir / METADATA_FILE", tempdir / METADATA_FILE)
             # input("00")
     except Exception as exe:
         print("exe", exe)
-    print("1")
+    # print("1")
 
     codegen_dir = tempdir / "codegen"
     codegen_dir.mkdir()

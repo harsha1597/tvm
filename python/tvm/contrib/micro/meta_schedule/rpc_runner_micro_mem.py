@@ -20,7 +20,7 @@ from contextlib import contextmanager
 from typing import Callable, List, Optional, Union
 from collections import namedtuple
 import signal
-import random
+import random,os
 from pathlib import Path
 
 from tvm import micro
@@ -48,7 +48,7 @@ class RPCRunnerMicroMem(PyRunner):
         project_options: Optional[dict] = None,
         rpc_configs: Optional[List[RPCConfig]] = None,
         evaluator_config: Optional[EvaluatorConfig] = None,
-        max_workers: Optional[int] = None,
+        max_workers: Optional[int] = 1,
         initializer: Optional[Callable[[], None]] = None,
         session_timeout_sec: int = 300,
     ) -> None:
@@ -115,7 +115,7 @@ def parse_elf(path):
     """Extract static memory usage details from ELF file by mapping each segment."""
     from elftools.elf import elffile
     # TODO: check if this is generic anough for multiple platforms (riscv, arm, x86)
-    # TODO: comare results with `riscv32-unknown-elf-size`
+    # TODO: compare results with `riscv32-unknown-elf-size`
     m = {}
     m["rom_rodata"] = 0
     m["rom_code"] = 0
@@ -255,7 +255,7 @@ def parse_elf(path):
     return m
 
 
-def extract_mem(build_result):
+def extract_mem(build_result,elf_path):
     import tarfile
     import tempfile
     # import subprocess
@@ -280,33 +280,37 @@ def extract_mem(build_result):
             workspace_bytes = metadata["workspace_bytes"]
             workspace_kb = workspace_bytes / 1e3
 
-            # lib0_path = Path(dest) / "codegen" / "host" / "lib" / "lib0.o"
-            lib1_path = Path(dest) / "codegen" / "host" / "lib" / "lib1.o"
-            assert lib1_path.is_file(), "lib1.o does not exist"
-            parsed = parse_elf(lib1_path)
-            print("parsed", parsed)
-            # out = subprocess.check_output(["size", lib0_path]).decode("utf-8")
-            # print("out0", out)
-            # out = subprocess.check_output(["size", lib1_path]).decode("utf-8")
-            # print("out1", out)
-            # out = out.strip().splitlines()
-            # assert len(out) == 2
-            # out = out[1].strip()
-            # out = out.split(" ", 1)[0]
-            # print("out", out)
-            # text_b = int(out)
-            text_b = parsed["rom_code"]
-            text_kb = text_b / 1e3
-            rodata_b = parsed["rom_rodata"]
-            rodata_kb = rodata_b / 1e3
-            print("text_kb", text_kb)
-            print("rodata_kb", rodata_kb)
-            print("const_kb", const_kb)
-            print("workspace_kb", workspace_kb)
-            ret.append(text_kb)
-            ret.append(rodata_kb)
-            ret.append(const_kb)
-            ret.append(workspace_kb)
+        # lib0_path = Path(dest) / "codegen" / "host" / "lib" / "lib0.o"
+        # lib1_path = Path(dest) / "codegen" / "host" / "lib" / "lib1.o"
+        # input("Assert >")
+        # assert lib1_path.is_file(), "lib1.o does not exist"
+        # input("Asserted >")
+        parsed = parse_elf(elf_path)
+        print("parsed", parsed)
+        # out = subprocess.check_output(["size", lib0_path]).decode("utf-8")
+        # print("out0", out)
+        # out = subprocess.check_output(["size", lib1_path]).decode("utf-8")
+        # print("out1", out)
+        # out = out.strip().splitlines()
+        # assert len(out) == 2
+        # out = out[1].strip()
+        # out = out.split(" ", 1)[0]
+        # print("out", out)
+        # text_b = int(out)
+        text_b = parsed["rom_code"]
+        text_kb = text_b / 1e3
+        rodata_b = parsed["rom_rodata"]
+        rodata_kb = rodata_b / 1e3
+        print("text_kb", text_kb)
+        print("rodata_kb", rodata_kb)
+        print("const_kb", const_kb)
+        print("workspace_kb", workspace_kb)
+        text_kb=0
+        rodata_kb=0
+        ret.append(text_kb)
+        ret.append(rodata_kb)
+        ret.append(const_kb)
+        ret.append(workspace_kb)
     # import time
     # time.sleep(5)
     return ret
@@ -322,6 +326,12 @@ def _worker_func_mem(
     args_info: T_ARG_INFO_JSON_OBJ_LIST,
 ) -> List[float]:
     print("_worker_func")
+    
+    # TODO: Communication with cmake build directory, for a better solution?
+    elf_dir = "/nfs/TUEIEDAscratch/ge85zic/tmpproj" # Store built binaries here for measuring mem usage, delete all files after each measurement
+
+    _ = [os.remove(os.path.join(elf_dir, f)) for f in os.listdir(elf_dir)]
+
     if platform not in micro.build.MicroTVMTemplateProject.list():
         # lookup via path
         if not Path(platform).is_dir():
@@ -333,6 +343,7 @@ def _worker_func_mem(
     module_loader = micro.AutoTvmModuleLoader(
         template_project_dir=template_project_dir,
         project_options=project_options,
+        # project_dir=proj_dir
     )
 
     rpc_config = random.choice(rpc_configs)
@@ -345,8 +356,7 @@ def _worker_func_mem(
     }
 
     build_result = namedtuple("BuildResult", ["filename"])(artifact_path)
-    print("build_result", build_result)
-    mem = extract_mem(build_result)
+    
 
     with module_loader(remote_kw, build_result) as (remote, mod):
         dev = remote.device(device_type, 0)
@@ -375,6 +385,15 @@ def _worker_func_mem(
         dev.sync()
 
         costs = time_f(*args).results
+        # print("build_result", build_result)
+        # input(">")
+
+    # print("build_result", build_result)
+    # input(">")
+    built_file = os.listdir(elf_dir)
+    assert len(built_file) == 1, "Error when reading built binary, found files: "+str(built_file)
+    
+    mem = extract_mem(os.path.join(elf_dir, built_file[0]))
     print("costs", costs)
     # mem = [12.12]
     print("mem", mem)
@@ -383,6 +402,7 @@ def _worker_func_mem(
     # input(">")
     # return costs
     costs_ = {"run_secs": costs, "mem": mem}
+    # input(">")
     return costs_
 
 

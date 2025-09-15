@@ -1,751 +1,328 @@
-work_dir_path tune_logs/20250903T160544
+work_dir_path tune_logs/20250915T120737
 Tracker summary:
  {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
  max_trials_global:  1000000
 Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
 NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
-work_dir_path tune_logs/20250903T160551
+work_dir_path tune_logs/20250915T120744
 Tracker summary:
  {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
  max_trials_global:  1000000
 Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
 NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
-work_dir_path tune_logs/20250903T160600
+work_dir_path tune_logs/20250915T120752
 Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite 
 NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite
-work_dir_path tune_logs/20250903T160600
+work_dir_path tune_logs/20250915T120752
 Tracker summary:
  {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
  max_trials_global:  1000000
 Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
 NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite
-work_dir_path tune_logs/20250903T160608
+work_dir_path tune_logs/20250915T120801
 Tracker summary:
  {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
  max_trials_global:  1000000
 Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite qnn.requantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
 NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite
-work_dir_path tune_logs/20250903T160613
+work_dir_path tune_logs/20250915T120806
 Tracker summary:
  {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
  max_trials_global:  1000000
 Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
 NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_logs/20250903T160619
+work_dir_path tune_logs/20250915T120812
 Tracker summary:
  {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
  max_trials_global:  1000000
-2025-09-03 16:06:24 [INFO] Logging directory: tune_logs/20250903T160619/logs
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_nn_conv2d"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_bias_add"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_relu"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_relu_1"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_reshape"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_dense"
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:393] 
- ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
----------------------------------------------------------------------------------------------------------------------
-  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |      0 |      
----------------------------------------------------------------------------------------------------------------------
+2025-09-15 12:08:17 [INFO] Logging directory: tune_logs/20250915T120812/logs
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #0: "fused_nn_conv2d"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #1: "fused_nn_bias_add"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #2: "fused_nn_relu"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #3: "fused_nn_max_pool2d"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #4: "fused_nn_conv2d_1"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #5: "fused_nn_bias_add_1"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #6: "fused_nn_relu_1"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #7: "fused_nn_max_pool2d_1"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #8: "fused_reshape"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:174] Initializing Task #9: "fused_nn_dense"
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Total trials: 0
 Total latency (us): 0
 
-2025-09-03 16:06:32 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_nn_conv2d"
-2025-09-03 16:06:59 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:07:02 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:07:02 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_bias_add"
-2025-09-03 16:07:04 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:07:06 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:07:06 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_relu"
-2025-09-03 16:07:06 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:07:08 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:07:08 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:07:10 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:07:12 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:07:12 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:07:30 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:07:32 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:07:32 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:07:33 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:07:35 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:07:35 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #6: "fused_nn_relu_1"
-2025-09-03 16:07:36 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:07:37 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:07:37 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:07:39 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:07:41 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:07:41 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #8: "fused_reshape"
-2025-09-03 16:07:42 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:07:44 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:07:44 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #9: "fused_nn_dense"
-2025-09-03 16:07:52 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:07:54 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite Traceback (most recent call last):
-  1: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  0: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  2: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  1: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  0: tvm::FloatImm tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMArgValue>::AsObjectRef<tvm::FloatImm>() const
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h", line 924
-TVMError: In function meta_schedule.RunnerResult(0: Array<FloatImm>, 1: runtime.String, 2: FloatImm) -> meta_schedule.RunnerResult: error while converting argument 2: [16:07:54] /nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h:2349: InternalError: Check failed: type_code_ == kTVMObjectHandle (11 vs. 8) : expected Object but got str
-
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite
-work_dir_path tune_logs/20250903T160755
-2025-09-03 16:07:55 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
-work_dir_path tune_logs/20250903T160801
-2025-09-03 16:08:01 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
-work_dir_path tune_logs/20250903T160810
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite 
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite
-work_dir_path tune_logs/20250903T160810
-2025-09-03 16:08:10 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite
-work_dir_path tune_logs/20250903T160818
-2025-09-03 16:08:18 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite qnn.requantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite
-work_dir_path tune_logs/20250903T160823
-2025-09-03 16:08:23 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_logs/20250903T160829
-2025-09-03 16:08:29 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-2025-09-03 16:08:34 [INFO] Logging directory: tune_logs/20250903T160829/logs
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_nn_conv2d"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_bias_add"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_relu"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_relu_1"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_reshape"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_dense"
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:393] 
- ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
----------------------------------------------------------------------------------------------------------------------
-  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |      0 |      
----------------------------------------------------------------------------------------------------------------------
-Total trials: 0
+2025-09-15 12:08:26 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_nn_conv2d"
+2025-09-15 12:08:52 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
+2025-09-15 12:08:57 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
+2025-09-15 12:08:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_bias_add"
+2025-09-15 12:08:58 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-09-15 12:08:59 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-09-15 12:08:59 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_nn_relu"
+2025-09-15 12:09:00 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-09-15 12:09:02 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-09-15 12:09:02 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
+2025-09-15 12:09:04 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
+2025-09-15 12:09:06 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
+2025-09-15 12:09:06 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
+2025-09-15 12:09:24 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
+2025-09-15 12:09:27 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
+2025-09-15 12:09:27 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #5: "fused_nn_bias_add_1"
+2025-09-15 12:09:28 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-09-15 12:09:29 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-09-15 12:09:29 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #6: "fused_nn_relu_1"
+2025-09-15 12:09:30 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-09-15 12:09:31 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-09-15 12:09:31 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #7: "fused_nn_max_pool2d_1"
+2025-09-15 12:09:33 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
+2025-09-15 12:09:35 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
+2025-09-15 12:09:35 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #8: "fused_reshape"
+2025-09-15 12:09:36 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-09-15 12:09:37 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-09-15 12:09:37 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #9: "fused_nn_dense"
+2025-09-15 12:09:46 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
+2025-09-15 12:09:48 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
+2025-09-15 12:12:47 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_nn_conv2d"
+2025-09-15 12:12:47 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 5
 Total latency (us): 0
 
-2025-09-03 16:08:34 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_nn_conv2d"
-2025-09-03 16:09:01 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:09:03 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:09:03 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_bias_add"
-2025-09-03 16:09:04 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:09:06 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:09:06 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_relu"
-2025-09-03 16:09:07 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:09:09 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:09:09 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:09:10 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:09:12 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:09:12 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:09:31 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:09:33 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:09:33 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:09:34 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:09:36 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:09:36 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #6: "fused_nn_relu_1"
-2025-09-03 16:09:37 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:09:38 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:09:38 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:09:40 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:09:42 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:09:42 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #8: "fused_reshape"
-2025-09-03 16:09:43 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:09:44 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:09:44 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #9: "fused_nn_dense"
-2025-09-03 16:09:53 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:09:56 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite Traceback (most recent call last):
-  1: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  0: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  2: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  1: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  0: tvm::FloatImm tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMArgValue>::AsObjectRef<tvm::FloatImm>() const
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h", line 924
-TVMError: In function meta_schedule.RunnerResult(0: Array<FloatImm>, 1: runtime.String, 2: FloatImm) -> meta_schedule.RunnerResult: error while converting argument 2: [16:09:56] /nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h:2349: InternalError: Check failed: type_code_ == kTVMObjectHandle (11 vs. 8) : expected Object but got str
-
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite
-work_dir_path tune_logs/20250903T160956
-2025-09-03 16:09:56 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
-work_dir_path tune_logs/20250903T161002
-2025-09-03 16:10:03 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
-work_dir_path tune_logs/20250903T161011
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite 
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite
-work_dir_path tune_logs/20250903T161011
-2025-09-03 16:10:12 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite
-work_dir_path tune_logs/20250903T161019
-2025-09-03 16:10:19 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite qnn.requantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite
-work_dir_path tune_logs/20250903T161024
-2025-09-03 16:10:24 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_logs/20250903T161030
-2025-09-03 16:10:30 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-2025-09-03 16:10:35 [INFO] Logging directory: tune_logs/20250903T161030/logs
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_nn_conv2d"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_bias_add"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_relu"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_relu_1"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_reshape"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_dense"
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:393] 
- ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
----------------------------------------------------------------------------------------------------------------------
-  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |      0 |      
----------------------------------------------------------------------------------------------------------------------
-Total trials: 0
+2025-09-15 12:12:54 [INFO] [task_scheduler.cc:252] [Updated] Task #1: "fused_nn_bias_add"
+2025-09-15 12:12:54 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 6
 Total latency (us): 0
 
-2025-09-03 16:10:35 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_nn_conv2d"
-2025-09-03 16:11:01 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:11:04 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:11:04 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_bias_add"
-2025-09-03 16:11:05 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:11:07 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:11:07 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_relu"
-2025-09-03 16:11:08 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:11:10 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:11:10 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:11:11 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:11:13 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:11:13 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:11:32 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:11:34 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:11:34 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:11:35 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:11:37 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:11:37 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #6: "fused_nn_relu_1"
-2025-09-03 16:11:38 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:11:39 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:11:39 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:11:41 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:11:43 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:11:43 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #8: "fused_reshape"
-2025-09-03 16:11:44 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:11:45 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:11:45 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #9: "fused_nn_dense"
-2025-09-03 16:11:55 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:11:57 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite Traceback (most recent call last):
-  1: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  0: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  2: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  1: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  0: tvm::FloatImm tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMArgValue>::AsObjectRef<tvm::FloatImm>() const
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h", line 924
-TVMError: In function meta_schedule.RunnerResult(0: Array<FloatImm>, 1: runtime.String, 2: FloatImm) -> meta_schedule.RunnerResult: error while converting argument 2: [16:11:57] /nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h:2349: InternalError: Check failed: type_code_ == kTVMObjectHandle (11 vs. 8) : expected Object but got str
-
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite
-work_dir_path tune_logs/20250903T161157
-2025-09-03 16:11:57 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
-work_dir_path tune_logs/20250903T161203
-2025-09-03 16:12:03 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
-work_dir_path tune_logs/20250903T161212
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite 
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite
-work_dir_path tune_logs/20250903T161212
-2025-09-03 16:12:12 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite
-work_dir_path tune_logs/20250903T161220
-2025-09-03 16:12:20 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite qnn.requantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite
-work_dir_path tune_logs/20250903T161225
-2025-09-03 16:12:25 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_logs/20250903T161231
-2025-09-03 16:12:31 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-2025-09-03 16:12:36 [INFO] Logging directory: tune_logs/20250903T161231/logs
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_nn_conv2d"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_bias_add"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_relu"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_relu_1"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_reshape"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_dense"
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:393] 
- ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
----------------------------------------------------------------------------------------------------------------------
-  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |      0 |      
----------------------------------------------------------------------------------------------------------------------
-Total trials: 0
+2025-09-15 12:13:00 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_nn_relu"
+2025-09-15 12:13:00 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 7
 Total latency (us): 0
 
-2025-09-03 16:12:36 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_nn_conv2d"
-2025-09-03 16:13:03 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:13:06 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:13:06 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_bias_add"
-2025-09-03 16:13:07 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:13:09 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:13:09 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_relu"
-2025-09-03 16:13:10 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:13:12 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:13:12 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:13:13 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:13:15 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:13:15 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:13:34 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:13:36 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:13:36 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:13:37 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:13:39 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:13:39 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #6: "fused_nn_relu_1"
-2025-09-03 16:13:40 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:13:41 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:13:41 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:13:43 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:13:45 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:13:45 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #8: "fused_reshape"
-2025-09-03 16:13:46 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:13:47 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:13:47 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #9: "fused_nn_dense"
-2025-09-03 16:13:57 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:13:59 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite Traceback (most recent call last):
-  1: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  0: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  2: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  1: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  0: tvm::FloatImm tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMArgValue>::AsObjectRef<tvm::FloatImm>() const
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h", line 924
-TVMError: In function meta_schedule.RunnerResult(0: Array<FloatImm>, 1: runtime.String, 2: FloatImm) -> meta_schedule.RunnerResult: error while converting argument 2: [16:13:59] /nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h:2349: InternalError: Check failed: type_code_ == kTVMObjectHandle (11 vs. 8) : expected Object but got str
-
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite
-work_dir_path tune_logs/20250903T161359
-2025-09-03 16:13:59 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
-work_dir_path tune_logs/20250903T161405
-2025-09-03 16:14:05 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
-work_dir_path tune_logs/20250903T161414
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite 
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite
-work_dir_path tune_logs/20250903T161414
-2025-09-03 16:14:14 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite
-work_dir_path tune_logs/20250903T161422
-2025-09-03 16:14:22 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite qnn.requantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite
-work_dir_path tune_logs/20250903T161427
-2025-09-03 16:14:27 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_logs/20250903T161433
-2025-09-03 16:14:33 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-2025-09-03 16:14:38 [INFO] Logging directory: tune_logs/20250903T161433/logs
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_nn_conv2d"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_bias_add"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_relu"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_relu_1"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_reshape"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_dense"
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:393] 
- ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
----------------------------------------------------------------------------------------------------------------------
-  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |      0 |      
----------------------------------------------------------------------------------------------------------------------
-Total trials: 0
+2025-09-15 12:13:32 [INFO] [task_scheduler.cc:252] [Updated] Task #3: "fused_nn_max_pool2d"
+2025-09-15 12:13:32 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 12
 Total latency (us): 0
 
-2025-09-03 16:14:38 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_nn_conv2d"
-2025-09-03 16:15:04 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:15:07 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:15:07 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_bias_add"
-2025-09-03 16:15:08 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:15:10 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:15:10 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_relu"
-2025-09-03 16:15:11 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:15:13 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:15:13 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:15:15 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:15:17 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:15:17 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:15:35 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:15:37 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:15:37 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:15:39 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:15:40 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:15:40 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #6: "fused_nn_relu_1"
-2025-09-03 16:15:41 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:15:43 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:15:43 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:15:44 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:15:46 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:15:46 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #8: "fused_reshape"
-2025-09-03 16:15:47 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:15:49 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:15:49 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #9: "fused_nn_dense"
-2025-09-03 16:15:58 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:16:00 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite Traceback (most recent call last):
-  1: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  0: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  2: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  1: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  0: tvm::FloatImm tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMArgValue>::AsObjectRef<tvm::FloatImm>() const
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h", line 924
-TVMError: In function meta_schedule.RunnerResult(0: Array<FloatImm>, 1: runtime.String, 2: FloatImm) -> meta_schedule.RunnerResult: error while converting argument 2: [16:16:00] /nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h:2349: InternalError: Check failed: type_code_ == kTVMObjectHandle (11 vs. 8) : expected Object but got str
-
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite
-work_dir_path tune_logs/20250903T161600
-2025-09-03 16:16:00 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
-work_dir_path tune_logs/20250903T161606
-2025-09-03 16:16:06 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
-work_dir_path tune_logs/20250903T161615
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite 
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite
-work_dir_path tune_logs/20250903T161615
-2025-09-03 16:16:15 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite
-work_dir_path tune_logs/20250903T161623
-2025-09-03 16:16:23 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite qnn.requantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite
-work_dir_path tune_logs/20250903T161628
-2025-09-03 16:16:28 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_logs/20250903T161634
-2025-09-03 16:16:34 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-2025-09-03 16:16:39 [INFO] Logging directory: tune_logs/20250903T161634/logs
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_nn_conv2d"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_bias_add"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_relu"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_relu_1"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_reshape"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_dense"
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:393] 
- ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
----------------------------------------------------------------------------------------------------------------------
-  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |      0 |      
----------------------------------------------------------------------------------------------------------------------
-Total trials: 0
+2025-09-15 12:14:03 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_nn_conv2d_1"
+2025-09-15 12:14:03 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 17
 Total latency (us): 0
 
-2025-09-03 16:16:39 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_nn_conv2d"
-2025-09-03 16:17:07 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:17:09 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:17:09 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_bias_add"
-2025-09-03 16:17:10 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:17:12 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:17:12 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_relu"
-2025-09-03 16:17:13 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:17:15 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:17:15 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:17:16 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:17:19 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:17:19 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:17:37 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:17:40 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:17:40 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:17:41 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:17:42 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:17:42 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #6: "fused_nn_relu_1"
-2025-09-03 16:17:43 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:17:45 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:17:45 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:17:46 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:17:48 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:17:48 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #8: "fused_reshape"
-2025-09-03 16:17:49 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:17:51 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:17:51 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #9: "fused_nn_dense"
-2025-09-03 16:18:00 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:18:02 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite Traceback (most recent call last):
-  1: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  0: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  2: tvm::runtime::PackedFuncObj::Extractor<tvm::runtime::PackedFuncSubObj<tvm::runtime::TypedPackedFunc<tvm::meta_schedule::RunnerResult (tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)>::AssignTypedLambda<tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}>(tvm::meta_schedule::{lambda(tvm::runtime::Array<tvm::FloatImm, void>, tvm::runtime::Optional<tvm::runtime::String>, tvm::runtime::Optional<tvm::FloatImm>)#6}, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)::{lambda(tvm::runtime::TVMArgs const&, tvm::runtime::TVMRetValue*)#1}> >::Call(tvm::runtime::PackedFuncObj const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, tvm::runtime::TVMRetValue)
-  1: tvm::runtime::TVMMovableArgValueWithContext_::operator tvm::runtime::Optional<tvm::FloatImm><tvm::runtime::Optional<tvm::FloatImm> >() const
-  0: tvm::FloatImm tvm::runtime::TVMPODValue_CRTP_<tvm::runtime::TVMArgValue>::AsObjectRef<tvm::FloatImm>() const
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h", line 924
-TVMError: In function meta_schedule.RunnerResult(0: Array<FloatImm>, 1: runtime.String, 2: FloatImm) -> meta_schedule.RunnerResult: error while converting argument 2: [16:18:02] /nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/include/tvm/runtime/packed_func.h:2349: InternalError: Check failed: type_code_ == kTVMObjectHandle (11 vs. 8) : expected Object but got str
-
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite
-work_dir_path tune_logs/20250903T161802
-2025-09-03 16:18:02 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite
-work_dir_path tune_logs/20250903T161808
-2025-09-03 16:18:09 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite
-work_dir_path tune_logs/20250903T161817
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite 
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite
-work_dir_path tune_logs/20250903T161817
-2025-09-03 16:18:18 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite
-work_dir_path tune_logs/20250903T161825
-2025-09-03 16:18:25 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite qnn.requantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite
-work_dir_path tune_logs/20250903T161830
-2025-09-03 16:18:31 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite qnn.quantize is currently only supported with Hexagon. Please run QNN Canonicalize pass to decompose this op into supported ops.
-NotImplementedError: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_logs/20250903T161836
-2025-09-03 16:18:36 [INFO] LocalBuilder: max_workers = 4
-Tracker summary:
- {'queue_info': {'$local$device': {'free': 1, 'pending': 0}}, 'server_info': [{'key': 'server:$local$device', 'addr': ['127.0.0.1', 9191]}]} 
- max_trials_global:  1000000
-2025-09-03 16:18:41 [INFO] Logging directory: tune_logs/20250903T161836/logs
-2025-09-03 16:18:41 [INFO] [task_scheduler.cc:232] Initializing Task #0: "fused_nn_conv2d"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #1: "fused_nn_bias_add"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #2: "fused_nn_relu"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #4: "fused_nn_conv2d_1"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #5: "fused_nn_bias_add_1"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #6: "fused_nn_relu_1"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #7: "fused_nn_max_pool2d_1"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #8: "fused_reshape"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:232] Initializing Task #9: "fused_nn_dense"
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:393] 
- ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Trials | Done 
----------------------------------------------------------------------------------------------------------------------
-  0 |       fused_nn_conv2d | 73728 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  1 |     fused_nn_bias_add |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  2 |         fused_nn_relu |  3072 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  3 |   fused_nn_max_pool2d |  3024 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  4 |     fused_nn_conv2d_1 | 43008 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  5 |   fused_nn_bias_add_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |      0 |      
-  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |      0 |      
----------------------------------------------------------------------------------------------------------------------
-Total trials: 0
+2025-09-15 12:14:09 [INFO] [task_scheduler.cc:252] [Updated] Task #5: "fused_nn_bias_add_1"
+2025-09-15 12:14:09 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 18
 Total latency (us): 0
 
-2025-09-03 16:18:42 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #0: "fused_nn_conv2d"
-2025-09-03 16:19:08 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:19:10 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:19:10 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #1: "fused_nn_bias_add"
-2025-09-03 16:19:12 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:19:14 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:19:14 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #2: "fused_nn_relu"
-2025-09-03 16:19:15 [INFO] [task_scheduler.cc:266] Sending 1 sample(s) to builder
-2025-09-03 16:19:16 [INFO] [task_scheduler.cc:268] Sending 1 sample(s) to runner
-2025-09-03 16:19:16 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #3: "fused_nn_max_pool2d"
-2025-09-03 16:19:18 [INFO] [task_scheduler.cc:266] Sending 5 sample(s) to builder
-2025-09-03 16:19:20 [INFO] [task_scheduler.cc:268] Sending 5 sample(s) to runner
-2025-09-03 16:19:20 [INFO] [task_scheduler.cc:253] TaskScheduler picks Task #4: "fused_nn_conv2d_1"
-Exception ignored on calling ctypes callback function: <function convert_to_tvm_func.<locals>.cfun at 0x7fce60142b80>
+2025-09-15 12:14:15 [INFO] [task_scheduler.cc:252] [Updated] Task #6: "fused_nn_relu_1"
+2025-09-15 12:14:15 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 19
+Total latency (us): 0
+
+2025-09-15 12:14:48 [INFO] [task_scheduler.cc:252] [Updated] Task #7: "fused_nn_max_pool2d_1"
+2025-09-15 12:14:48 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  8 |         fused_reshape |     1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 24
+Total latency (us): 0
+
+2025-09-15 12:14:54 [INFO] [task_scheduler.cc:252] [Updated] Task #8: "fused_reshape"
+2025-09-15 12:14:54 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  8 |         fused_reshape |     1 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  9 |        fused_nn_dense |  7168 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 25
+Total latency (us): 0
+
+2025-09-15 12:15:25 [INFO] [task_scheduler.cc:252] [Updated] Task #9: "fused_nn_dense"
+2025-09-15 12:15:25 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  8 |         fused_reshape |     1 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  9 |        fused_nn_dense |  7168 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 30
+Total latency (us): 0
+
+2025-09-15 12:15:25 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_nn_conv2d"
+2025-09-15 12:15:51 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
+2025-09-15 12:15:53 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
+2025-09-15 12:15:53 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #6: "fused_nn_relu_1"
+2025-09-15 12:15:54 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
+2025-09-15 12:15:54 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
+2025-09-15 12:15:54 [INFO] [task_scheduler.cc:252] [Updated] Task #6: "fused_nn_relu_1"
+2025-09-15 12:15:54 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  8 |         fused_reshape |     1 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  9 |        fused_nn_dense |  7168 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 30
+Total latency (us): 0
+
+2025-09-15 12:15:54 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #9: "fused_nn_dense"
+2025-09-15 12:16:04 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
+2025-09-15 12:16:07 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
+2025-09-15 12:16:27 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_nn_conv2d"
+2025-09-15 12:16:27 [INFO] [task_scheduler.cc:350] 
+ ID |                  Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |       fused_nn_conv2d | 73728 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |     10 |      
+  1 |     fused_nn_bias_add |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 |         fused_nn_relu |  3072 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 |   fused_nn_max_pool2d |  3024 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  4 |     fused_nn_conv2d_1 | 43008 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  5 |   fused_nn_bias_add_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  6 |       fused_nn_relu_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  7 | fused_nn_max_pool2d_1 |   672 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+  8 |         fused_reshape |     1 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  9 |        fused_nn_dense |  7168 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      5 |      
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 35
+Total latency (us): 0
+
+2025-09-15 12:16:27 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_nn_conv2d"
+Exception ignored on calling ctypes callback function: <function convert_to_tvm_func.<locals>.cfun at 0x7f520f007670>
 Traceback (most recent call last):
   File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/_ffi/_ctypes/packed_func.py", line 76, in cfun
     def cfun(args, type_codes, num_args, ret, _):
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/contrib/micro/meta_schedule/rpc_runner_micro_mem.py", line 482, in handle_SIGINT
+  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/contrib/micro/meta_schedule/rpc_runner_micro_mem.py", line 502, in handle_SIGINT
     raise KeyboardInterrupt("Received SIGINT")
 KeyboardInterrupt: Received SIGINT

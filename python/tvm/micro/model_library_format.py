@@ -619,7 +619,7 @@ def _export_operator_model_library_format(mod: build_module.OperatorModule, temp
         with open(tempdir / METADATA_FILE, "w") as metadata_f:
             # print("0")
             json.dump(metadata, metadata_f)
-            print("tempdir / METADATA_FILE", tempdir / METADATA_FILE)
+            # print("tempdir / METADATA_FILE", tempdir / METADATA_FILE)
             # input("00")
     except Exception as exe:
         print("exe", exe)

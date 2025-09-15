@@ -85,7 +85,7 @@ def get_local_builder_micro():
 
         const_bytes = -1
         workspace_bytes = -1
-
+        # allocated_bytes = -1
         def my_pass():
             # print("my_pass")
             def _transform(f, *_):
@@ -103,8 +103,8 @@ def get_local_builder_micro():
             return tvm.tir.transform.prim_func_pass(_transform, opt_level=0, name="my_pass")
         with tvm.transform.PassContext(config={"tir.add_lower_pass": [(3, my_pass())]}):
             rt_mod = tvm_build(mod, target=target, runtime=runtime)
-        print("const_bytes3", const_bytes)
-        print("workspace_bytes3", workspace_bytes)
+        # print("const_bytes3", const_bytes)
+        # print("workspace_bytes3", workspace_bytes)
         # with tvm.transform.PassContext(
         #     opt_level=3, config={"tir.usmp.enable": True},
         # ):

@@ -20,7 +20,7 @@ from contextlib import contextmanager
 from typing import Callable, List, Optional, Union
 from collections import namedtuple
 import signal
-import random,os
+import random,glob,os
 from pathlib import Path
 
 from tvm import micro
@@ -262,11 +262,11 @@ def extract_mem(build_result,elf_path):
     import json
     ret = []
     fname = build_result.filename
-    print("fname", fname)
+    # print("fname", fname)
     # with tempfile.TemporaryDirectory() as dest:
     dest = tempfile.TemporaryDirectory().name
     if True:
-        print("dest", dest)
+        # print("dest", dest)
         with tarfile.open(fname) as f:
             f.extractall(dest)
             metadata_path = Path(dest) / "metadata.json"
@@ -274,7 +274,7 @@ def extract_mem(build_result,elf_path):
                 metadata = json.load(f2)
                 # metadata_str = f2.read()
                 # print("metadata_str", metadata_str)
-                print("metadata", metadata)
+                # print("metadata", metadata)
             const_bytes = metadata["const_bytes"]
             const_kb = const_bytes / 1e3
             workspace_bytes = metadata["workspace_bytes"]
@@ -286,7 +286,7 @@ def extract_mem(build_result,elf_path):
         # assert lib1_path.is_file(), "lib1.o does not exist"
         # input("Asserted >")
         parsed = parse_elf(elf_path)
-        print("parsed", parsed)
+        # print("parsed", parsed)
         # out = subprocess.check_output(["size", lib0_path]).decode("utf-8")
         # print("out0", out)
         # out = subprocess.check_output(["size", lib1_path]).decode("utf-8")
@@ -301,12 +301,12 @@ def extract_mem(build_result,elf_path):
         text_kb = text_b / 1e3
         rodata_b = parsed["rom_rodata"]
         rodata_kb = rodata_b / 1e3
-        print("text_kb", text_kb)
-        print("rodata_kb", rodata_kb)
-        print("const_kb", const_kb)
-        print("workspace_kb", workspace_kb)
-        text_kb=0
-        rodata_kb=0
+        # print("text_kb", text_kb)
+        # print("rodata_kb", rodata_kb)
+        # print("const_kb", const_kb)
+        # print("workspace_kb", workspace_kb)
+        # text_kb=0
+        # rodata_kb=0
         ret.append(text_kb)
         ret.append(rodata_kb)
         ret.append(const_kb)
@@ -325,12 +325,13 @@ def _worker_func_mem(
     device_type: str,
     args_info: T_ARG_INFO_JSON_OBJ_LIST,
 ) -> List[float]:
-    print("_worker_func")
+    # print("_worker_func")
     
     # TODO: Communication with cmake build directory, for a better solution?
-    elf_dir = "/nfs/TUEIEDAscratch/ge85zic/tmpproj" # Store built binaries here for measuring mem usage, delete all files after each measurement
+    elf_dir = "/nfs/TUEIEDAscratch/ge85zic/tmpproj/" # Store built binaries here for measuring mem usage, delete all files after each measurement
 
-    _ = [os.remove(os.path.join(elf_dir, f)) for f in os.listdir(elf_dir)]
+    # Remove binaries from other runs 
+    _ = [os.remove(os.path.join(elf_dir,f)) for f in os.listdir(elf_dir)]
 
     if platform not in micro.build.MicroTVMTemplateProject.list():
         # lookup via path
@@ -388,15 +389,16 @@ def _worker_func_mem(
         # print("build_result", build_result)
         # input(">")
 
-    # print("build_result", build_result)
+    
     # input(">")
-    built_file = os.listdir(elf_dir)
+    built_file = glob.glob(elf_dir + "*.bin")
+    # print("build_result", built_file)
     assert len(built_file) == 1, "Error when reading built binary, found files: "+str(built_file)
     
-    mem = extract_mem(os.path.join(elf_dir, built_file[0]))
-    print("costs", costs)
+    mem = extract_mem(build_result, os.path.join(elf_dir, built_file[0]))
+    # print("costs", costs)
     # mem = [12.12]
-    print("mem", mem)
+    # print("mem", mem)
     # import time
     # time.sleep("60")
     # input(">")

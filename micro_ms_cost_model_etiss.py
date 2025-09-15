@@ -288,13 +288,13 @@ if __name__ == "__main__":
     model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
     # MODELS = ["/mobilenet_v1_1_0_224_quant/mobilenet_v1_1_0_224_quant.tflite","/lstm2/lstm2.tflite",
     #           "/cifar10/cifar10.tflite",""]
-    tflite_files=[ '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
-       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
-       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
-        '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
+    tflite_files=[ #'/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
+       #'/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
+       #'/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
+       # '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
-          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',
-           '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
+          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',]
+       #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
     
     
 
@@ -332,7 +332,7 @@ if __name__ == "__main__":
     # MS_DISPATCH = ?  # error
     SKIP_TUNING = False
 
-    opt_levels = list(range(0, 4))
+    opt_levels = list(range(1, 4))
     max_stack_alloca_vals = [0] + [2**k for k in range(1, 12+1)]
 
     pass_config = {

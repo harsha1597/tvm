@@ -110,7 +110,7 @@ class LocalBuilder(PyBuilder):
     def __init__(
         self,
         *,
-        max_workers: Optional[int] = None,
+        max_workers: Optional[int] = None, 
         timeout_sec: float = 30.0,
         f_build: Union[None, str, T_BUILD] = None,
         f_export: Union[None, str, T_EXPORT] = None,

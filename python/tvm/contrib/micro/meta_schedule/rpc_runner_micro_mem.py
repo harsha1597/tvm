@@ -19,8 +19,8 @@
 from contextlib import contextmanager
 from typing import Callable, List, Optional, Union
 from collections import namedtuple
-import signal
-import random,glob,os
+import signal,tempfile
+import random,glob,os,uuid
 from pathlib import Path
 
 from tvm import micro
@@ -48,7 +48,7 @@ class RPCRunnerMicroMem(PyRunner):
         project_options: Optional[dict] = None,
         rpc_configs: Optional[List[RPCConfig]] = None,
         evaluator_config: Optional[EvaluatorConfig] = None,
-        max_workers: Optional[int] = 1,
+        max_workers: Optional[int] = None,
         initializer: Optional[Callable[[], None]] = None,
         session_timeout_sec: int = 300,
     ) -> None:
@@ -110,6 +110,27 @@ class RPCRunnerMicroMem(PyRunner):
             results.append(future)  # type: ignore
         return results
 
+def remove_empty_files(directory_path):
+    """
+    Removes all empty files from the specified directory.
+    """
+    print(f"Scanning directory: {directory_path}")
+    
+    # Walk through all files in the directory
+    for filename in os.listdir(directory_path):
+        # Create the full path to the file
+        file_path = os.path.join(directory_path, filename)
+        
+        # Check if it is a file and not a directory
+        if os.path.isfile(file_path):
+            try:
+                # Check if the file size is 0
+                if os.path.getsize(file_path) == 0:
+                    # print(f"Removing empty file: {filename}")
+                    os.remove(file_path)
+            except OSError as e:
+                # print(f"Error processing file {filename}: {e}")
+                pass
 
 def parse_elf(path):
     """Extract static memory usage details from ELF file by mapping each segment."""
@@ -331,7 +352,12 @@ def _worker_func_mem(
     elf_dir = "/nfs/TUEIEDAscratch/ge85zic/tmpproj/" # Store built binaries here for measuring mem usage, delete all files after each measurement
 
     # Remove binaries from other runs 
-    _ = [os.remove(os.path.join(elf_dir,f)) for f in os.listdir(elf_dir)]
+    # _ = [os.remove(os.path.join(elf_dir,f)) for f in os.listdir(elf_dir)]
+    elfdest = tempfile.mkstemp(dir=elf_dir)[1] 
+    
+    # project_options["project_name"] = unique_build_id   
+    project_options["binary_dest"] = elfdest
+    # project_options["output_dir"] = elf_dir
 
     if platform not in micro.build.MicroTVMTemplateProject.list():
         # lookup via path
@@ -390,12 +416,13 @@ def _worker_func_mem(
         # input(">")
 
     
-    # input(">")
-    built_file = glob.glob(elf_dir + "*.bin")
-    # print("build_result", built_file)
-    assert len(built_file) == 1, "Error when reading built binary, found files: "+str(built_file)
-    
-    mem = extract_mem(build_result, os.path.join(elf_dir, built_file[0]))
+    if os.path.exists(elfdest):
+        mem = extract_mem(build_result, elfdest)
+        # remove_empty_files(elf_dir)
+        os.remove(elfdest)
+    else:
+        print("Error: No binary found at", elfdest)
+        mem = [0,0,0,0]
     # print("costs", costs)
     # mem = [12.12]
     # print("mem", mem)
@@ -404,6 +431,7 @@ def _worker_func_mem(
     # input(">")
     # return costs
     costs_ = {"run_secs": costs, "mem": mem}
+    print("costs_", costs_)
     # input(">")
     return costs_
 

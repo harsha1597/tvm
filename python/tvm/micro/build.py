@@ -164,6 +164,8 @@ class AutoTvmModuleLoader:
 
     @contextlib.contextmanager
     def __call__(self, remote_kw, build_result):
+        # print("Build result binary: ",build_result.filename)
+        # input(">>>")
         with open(build_result.filename, "rb") as build_file:
             build_result_bin = build_file.read()
 

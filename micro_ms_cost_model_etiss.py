@@ -24,7 +24,7 @@ from types import MappingProxyType
 from typing import Optional, Callable
 import pickle
 import numpy as np
-
+import random
 import tvm
 import tvm.testing
 from tvm import te, tir
@@ -46,7 +46,7 @@ from model_info import get_model_info
 
 
 logging.basicConfig(level=logging.DEBUG)
-get_logger("xgb_model").setLevel(logging.DEBUG)
+get_logger("microtvm_api_server").setLevel(logging.DEBUG)
 
 DIR = Path(__file__).parent.resolve()
 BASE_DIR = DIR.parent
@@ -153,7 +153,7 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
 
     KEEP = True
     if KEEP:
-        base_dir = Path("./tune_logs/")
+        base_dir = Path("./tune_codesize/")
         now = datetime.now()
         ts = now.strftime("%Y%m%dT%H%M%S")
 
@@ -223,7 +223,18 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
 
             ) as runner:
                 tracker = connect_tracker("127.0.0.1", 9190)
-                print("Tracker summary:\n", tracker.summary(), "\n max_trials_global: ",max_trials_global)
+                tracker_summary=tracker.summary()
+                if tracker_summary["queue_info"]['$local$device']['free'] == 0:
+                    RETRY=5
+                    for i in range(RETRY):
+                        print("No free device, wait 30s and retry {}/{}".format(i+1,RETRY))
+                        import time
+                        time.sleep(30)
+                        tracker_summary=tracker.summary()
+                        if tracker_summary["queue_info"]['$local$device']['free'] == 1:
+                            print("Got free device, continue")
+                            break
+                # print("Tracker summary:\n", tracker.summary(), "\n max_trials_global: ",max_trials_global)
 
                 if max_trials_global > 0:
                     ## tasks are induvidual functions
@@ -284,36 +295,37 @@ def get_all_tflite_files(directory):
         return tflite_files
 
 if __name__ == "__main__":
+
     # MODEL = "/work/git/mlonmcu/mlonmcu/workspace_default/models/resnet/resnet.tflite"
     model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
     # MODELS = ["/mobilenet_v1_1_0_224_quant/mobilenet_v1_1_0_224_quant.tflite","/lstm2/lstm2.tflite",
     #           "/cifar10/cifar10.tflite",""]
-    tflite_files=[ #'/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
-       #'/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
-       #'/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
-       # '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
-         '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
-          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',]
-       #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
+    # tflite_files=[ '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
+    #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
+    #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
+    #     '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
+    #      '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
+    #       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',
+    #        '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
     
     
 
     # Example usage:
-    # tflite_files = get_all_tflite_files(model_path)
-    
+    tflite_files = get_all_tflite_files(model_path)
+    random.shuffle(tflite_files)
     # print(ETISS_TEMPLATE)
     # assert len(sys.argv) == 2, "Usage: micro_ms_cost_model_etiss.py MODEL_PATH"
     # MODEL = sys.argv[1]
     ALTER_OP = True
-    TOOLCHAIN = "llvm"
+    TOOLCHAIN = "gcc"
     TARGET = "c -num-cores 1"
-    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 30, 1000000)
-    TASK_FILTER = list(range(10)) # Tune the top 10 highest FLOPs tasks
+    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 10, 1000000)
+    TASK_FILTER = list(range(5)) # Tune the top 10 highest FLOPs tasks
     MODULE_EQUALITY = "ignore-ndarray"
     TRANSFORM_LAYOUT = False
 
     OPTIONS = {
-        "verbose": False,
+        "verbose": True,
         "quiet": True,
         "gcc_prefix": str(GCC_PREFIX),
         "gcc_name": GCC_NAME,
@@ -324,7 +336,12 @@ if __name__ == "__main__":
         "abi": "ilp32d",
         "cpu_arch": "RV32IMACFD",
         "cpu_freq": 100000000,
-        "toolchain": TOOLCHAIN,
+        "toolchain": "llvm",#TOOLCHAIN,
+        "opt":2,
+        "gc":1,
+        "lto":1,
+        "unroll_loops":"ON",
+        "inline_functions":"OFF",
     }
     
     MS_DISPATCH = 1  # silent?
@@ -332,9 +349,12 @@ if __name__ == "__main__":
     # MS_DISPATCH = ?  # error
     SKIP_TUNING = False
 
-    opt_levels = list(range(1, 4))
-    max_stack_alloca_vals = [0] + [2**k for k in range(1, 12+1)]
-
+    sw_opt=list(range(1,4))
+    gc=[0,1]
+    lto=[0,1]
+    opt_levels = list(range(2, 4))
+    max_stack_alloca_vals = [2**k for k in range(1, 12+1)]
+    vals = ["ON","OFF","AUTO"]
     pass_config = {
         "tir.disable_vectorize": True,'tir.max_stack_alloca':1024
     }    
@@ -344,20 +364,34 @@ if __name__ == "__main__":
 
 
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    for opt in opt_levels:
-        for max_stack_alloca in max_stack_alloca_vals:
-            pass_config['tir.max_stack_alloca'] = max_stack_alloca
-            params_config = (opt, pass_config, disabled_pass)
-            
-            for i,MODEL in enumerate(tflite_files):
-                
-                try:
-                    db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
-                except Exception as e:
-                    print("Exception:", MODEL, e)
-                    print("NotImplementedError:", MODEL)
-                    continue
-
-
-    # with open("./tir_examples/db.pickle", "wb") as f:
-    #     pickle.dump(db, f)
+    for toolchain in ["gcc","llvm"]:
+        OPTIONS["toolchain"] = toolchain
+        for sw in sw_opt:
+            OPTIONS["opt"] = sw
+            for g in gc:
+                OPTIONS["gc"] = g
+                for l in lto:
+                    OPTIONS["lto"] = l
+                    # print("OPTIONS", OPTIONS)
+                    for unroll in vals:
+                        OPTIONS["unroll_loops"] = unroll
+                        for inline in vals:
+                            OPTIONS["inline_functions"] = inline
+                            print("OPTIONS", OPTIONS)
+                            for opt in opt_levels[::-1]:
+                                for max_stack_alloca in max_stack_alloca_vals:
+                                    pass_config['tir.max_stack_alloca'] = max_stack_alloca
+                                    params_config = (opt, pass_config, disabled_pass)
+                                    
+                                    for i,MODEL in enumerate(tflite_files):
+                                        print(params_config, MODEL)
+                                        
+                                        try:
+                                            db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+                                        except Exception as e:
+                                            print("Exception:", MODEL, e)
+                                            continue
+                    # tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
+                    # tuninglog_tofeats(tuning_log_path)
+                    # with open("./tir_examples/db.pickle", "wb") as f:
+                    #     pickle.dump(db, f)

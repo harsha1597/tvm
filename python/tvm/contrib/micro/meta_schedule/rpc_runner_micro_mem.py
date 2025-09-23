@@ -446,6 +446,7 @@ def get_rpc_runner_micro_mem(
     session_timeout_sec: int = 300,
     rpc_timeout_sec: int = 10,
     serial_numbers: List[str] = None,
+    max_workers: Optional[int] = None,
 ):
     """Parameters
     ----------
@@ -540,6 +541,7 @@ def get_rpc_runner_micro_mem(
             rpc_configs=rpc_configs,
             evaluator_config=evaluator_config,
             session_timeout_sec=session_timeout_sec,
+            max_workers=max_workers
         )
     finally:
         terminate()

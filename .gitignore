@@ -121,6 +121,11 @@ jvm/native/src/main/native/org_apache_tvm_native_c_api.h
 *.settings
 */node_modules/
 
+## Logs
+tune_codesize/
+tune_logs/
+tir_examples/
+tune.txt
 ## Various settings
 *.pbxuser
 !default.pbxuser
@@ -278,3 +283,4 @@ gallery/how_to/work_with_microtvm/micro_tvmc.py
 
 # GDB history file
 .gdb_history
+tune.txt

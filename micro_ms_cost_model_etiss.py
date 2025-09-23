@@ -20,27 +20,20 @@ import sys
 import logging
 from datetime import datetime
 from pathlib import Path
-from types import MappingProxyType
-from typing import Optional, Callable
-import pickle
 import numpy as np
 import random
 import tvm
-import tvm.testing
-from tvm import te, tir
 from tvm import relay
 from tvm.relay.backend import Executor
 from tvm.contrib import utils
 from tvm import meta_schedule as ms
 from tvm.driver import tvmc
-import tvm.micro.testing
 from tvm.meta_schedule.runner import EvaluatorConfig
 from tvm.meta_schedule.logging import get_logger
 from tvm import transform
 from tvm.contrib.micro.meta_schedule.local_builder_micro import get_local_builder_micro
-from tvm.contrib.micro.meta_schedule.rpc_runner_micro import get_rpc_runner_micro
 from tvm.contrib.micro.meta_schedule.rpc_runner_micro_mem import get_rpc_runner_micro_mem
-
+from tqdm import tqdm
 from tvm.rpc import connect_tracker
 from model_info import get_model_info
 
@@ -163,6 +156,13 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
         work_dir = utils.tempdir()
         work_dir_path = work_dir.path
     print("work_dir_path", work_dir_path)
+    os.makedirs(work_dir_path, exist_ok=True)
+
+    with open(os.path.join(work_dir_path, "options.txt"), "w") as f:
+        f.write(str(options) + "\n")
+        f.write(str(opt_params) + "\n")
+        f.write("model: " + model + "\n")
+
     mod, params, input_name, input_shape, input_dtype, data_sample = load_model(model)
 
     if transform_layout:
@@ -212,28 +212,28 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
             num_warmup_samples = 10
             #cost_model = ms.cost_model.XGBModel(extractor=extractor, num_warmup_samples=num_warmup_samples)
             cost_model = ms.cost_model.RandomModel()
-            # micro_rpc_workers = num_trials_per_iter
+            micro_rpc_workers = num_trials_per_iter
             with get_rpc_runner_micro_mem(
                 platform=platform, options=options, session_timeout_sec=120, evaluator_config=evaluator_config,
-                # serial_numbers=["micro"] * micro_rpc_workers,
+                serial_numbers=["micro"] * micro_rpc_workers,
                 tracker_host="127.0.0.1",
                 tracker_port=9190,
-                # max_workers=micro_rpc_workers,
+                max_workers=micro_rpc_workers,
                 rpc_timeout_sec=10,
 
             ) as runner:
-                tracker = connect_tracker("127.0.0.1", 9190)
-                tracker_summary=tracker.summary()
-                if tracker_summary["queue_info"]['$local$device']['free'] == 0:
-                    RETRY=5
-                    for i in range(RETRY):
-                        print("No free device, wait 30s and retry {}/{}".format(i+1,RETRY))
-                        import time
-                        time.sleep(30)
-                        tracker_summary=tracker.summary()
-                        if tracker_summary["queue_info"]['$local$device']['free'] == 1:
-                            print("Got free device, continue")
-                            break
+                # tracker = connect_tracker("127.0.0.1", 9190)
+                # tracker_summary=tracker.summary()
+                # if tracker_summary["queue_info"]['$local$device']['free'] == 0:
+                    # RETRY=5
+                    # for i in range(RETRY):
+                    #     print("No free device, wait 30s and retry {}/{}".format(i+1,RETRY))
+                    #     import time
+                    #     time.sleep(30)
+                    #     tracker_summary=tracker.summary()
+                    #     if tracker_summary["queue_info"]['$local$device']['free'] == 1:
+                    #         print("Got free device, continue")
+                    #         break
                 # print("Tracker summary:\n", tracker.summary(), "\n max_trials_global: ",max_trials_global)
 
                 if max_trials_global > 0:
@@ -300,18 +300,19 @@ if __name__ == "__main__":
     model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
     # MODELS = ["/mobilenet_v1_1_0_224_quant/mobilenet_v1_1_0_224_quant.tflite","/lstm2/lstm2.tflite",
     #           "/cifar10/cifar10.tflite",""]
-    # tflite_files=[ '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
+    tflite_files=[ 
+          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite']
+    #       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
     #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
     #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
     #     '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
     #      '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
-    #       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',
-    #        '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
+        #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
     
     
 
     # Example usage:
-    tflite_files = get_all_tflite_files(model_path)
+    # tflite_files = get_all_tflite_files(model_path)
     random.shuffle(tflite_files)
     # print(ETISS_TEMPLATE)
     # assert len(sys.argv) == 2, "Usage: micro_ms_cost_model_etiss.py MODEL_PATH"
@@ -319,7 +320,7 @@ if __name__ == "__main__":
     ALTER_OP = True
     TOOLCHAIN = "gcc"
     TARGET = "c -num-cores 1"
-    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (5, 10, 1000000)
+    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (10, 50, 1000000)
     TASK_FILTER = list(range(5)) # Tune the top 10 highest FLOPs tasks
     MODULE_EQUALITY = "ignore-ndarray"
     TRANSFORM_LAYOUT = False
@@ -350,8 +351,8 @@ if __name__ == "__main__":
     SKIP_TUNING = False
 
     sw_opt=list(range(1,4))
-    gc=[0,1]
-    lto=[0,1]
+    gc=[1,0]
+    lto=[1,0]
     opt_levels = list(range(2, 4))
     max_stack_alloca_vals = [2**k for k in range(1, 12+1)]
     vals = ["ON","OFF","AUTO"]
@@ -362,35 +363,38 @@ if __name__ == "__main__":
     sys.stdout = open("tune.txt", "w")
     sys.stderr = sys.stdout
 
+    config_list = []
 
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    for toolchain in ["gcc","llvm"]:
-        OPTIONS["toolchain"] = toolchain
-        for sw in sw_opt:
-            OPTIONS["opt"] = sw
-            for g in gc:
-                OPTIONS["gc"] = g
-                for l in lto:
-                    OPTIONS["lto"] = l
-                    # print("OPTIONS", OPTIONS)
-                    for unroll in vals:
-                        OPTIONS["unroll_loops"] = unroll
-                        for inline in vals:
-                            OPTIONS["inline_functions"] = inline
-                            print("OPTIONS", OPTIONS)
-                            for opt in opt_levels[::-1]:
-                                for max_stack_alloca in max_stack_alloca_vals:
-                                    pass_config['tir.max_stack_alloca'] = max_stack_alloca
-                                    params_config = (opt, pass_config, disabled_pass)
-                                    
-                                    for i,MODEL in enumerate(tflite_files):
-                                        print(params_config, MODEL)
-                                        
-                                        try:
-                                            db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
-                                        except Exception as e:
-                                            print("Exception:", MODEL, e)
-                                            continue
+    for i,MODEL in enumerate(tflite_files):
+        for toolchain in ["llvm","gcc"]:
+            OPTIONS["toolchain"] = toolchain
+            for sw in sw_opt[::-1]:
+                OPTIONS["opt"] = sw
+                for g in gc[::-1]:
+                    OPTIONS["gc"] = g
+                    for l in lto[::-1]:
+                        OPTIONS["lto"] = l
+                        # print("OPTIONS", OPTIONS)
+                        # for unroll in vals[::-1]:
+                        #     OPTIONS["unroll_loops"] = unroll
+                        #     for inline in vals:
+                        #         OPTIONS["inline_functions"] = inline
+                        # print("OPTIONS", OPTIONS)
+                        for opt in opt_levels[::-1]:
+                            for max_stack_alloca in max_stack_alloca_vals[::-1]:
+                                pass_config['tir.max_stack_alloca'] = max_stack_alloca
+                                params_config = (opt, pass_config, disabled_pass)
+                                config_list.append((MODEL, params_config, OPTIONS.copy()))
+                                
+    for i, (MODEL, params_config, OPTIONS) in tqdm(enumerate(config_list[179:])):
+        try:
+            
+            
+            db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
+        except Exception as e:
+            print("Exception:", MODEL, e)
+            continue
                     # tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
                     # tuninglog_tofeats(tuning_log_path)
                     # with open("./tir_examples/db.pickle", "wb") as f:

@@ -350,12 +350,17 @@ def _worker_func_mem(
     
     # TODO: Communication with cmake build directory, for a better solution?
     elf_dir = "/nfs/TUEIEDAscratch/ge85zic/tmpproj/" # Store built binaries here for measuring mem usage, delete all files after each measurement
-
+    trace_save_dest = project_options.get("work_dir_path",elf_dir)
     # Remove binaries from other runs 
     # _ = [os.remove(os.path.join(elf_dir,f)) for f in os.listdir(elf_dir)]
-    elfdest = tempfile.mkstemp(dir=elf_dir)[1] 
+    dir_name = os.path.join(trace_save_dest,str(uuid.uuid4()))
+    os.mkdir(dir_name)
+    elfdest = os.path.join(dir_name, "main")
+    # with open(elfdest,"w") as f:
+    #     f.write("") # touch file
     
     # project_options["project_name"] = unique_build_id   
+    project_options["work_dir_path"]= dir_name
     project_options["binary_dest"] = elfdest
     # project_options["output_dir"] = elf_dir
 
@@ -417,9 +422,10 @@ def _worker_func_mem(
 
     
     if os.path.exists(elfdest):
+        # print("Found binary at", elfdest)
         mem = extract_mem(build_result, elfdest)
         # remove_empty_files(elf_dir)
-        os.remove(elfdest)
+        # os.remove(elfdest) # remove binary
     else:
         print("Error: No binary found at", elfdest)
         mem = [0,0,0,0]

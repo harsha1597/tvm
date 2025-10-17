@@ -19,7 +19,7 @@ Construct the necessary state for the TVM graph executor
 from a Relay expression.
 """
 import warnings
-
+import traceback
 import numpy as np
 from tvm.ir import IRModule
 from tvm.target import Target
@@ -340,6 +340,8 @@ def build(
 
     if isinstance(ir_mod, _function.Function):
         if params:
+            print(traceback.format_exc())
+            # input(">>>")
             ir_mod = bind_params_by_name(ir_mod, params)
         ir_mod = IRModule.from_expr(ir_mod)
         warnings.warn(
@@ -437,6 +439,8 @@ def optimize(mod, target=None, params=None):
 
     if isinstance(mod, _function.Function):
         if params:
+            print(traceback.format_exc())
+            # input(">>>")
             mod = bind_params_by_name(mod, params)
         mod = IRModule.from_expr(mod)
         warnings.warn(
@@ -670,6 +674,8 @@ def create_executor(kind="debug", mod=None, device=None, target="llvm", params=N
         device = _nd.device(raw_targets[0].get_target_device_type(), 0)
 
     if params is not None:
+        print(traceback.format_exc())
+        # input(">>>")
         mod = IRModule.from_expr(bind_params_by_name(mod["main"], params))
 
     assert "executor" not in raw_targets[0].attrs or raw_targets[0].attrs["executor"] == kind

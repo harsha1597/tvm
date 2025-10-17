@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+tune_singlelayer_resnet/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -10,6 +11,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+tmp*/
 build/
 build-*/
 develop-eggs/
@@ -22,6 +24,7 @@ lib64/
 parts/
 sdist/
 var/
+tune*/
 *.egg-info/
 .installed.cfg
 *.egg

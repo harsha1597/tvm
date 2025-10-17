@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
+import os,pickle
 import sys
 import logging
 from datetime import datetime
@@ -121,7 +121,7 @@ def get_tuning_config():
         return {
             ms.mutator.MutateTileSize(): 0.9,
             ms.mutator.MutateComputeLocation(): 0.05,
-            ms.mutator.MutateUnroll(): 0.03,
+            ms.mutator.MutateUnroll(): 0.7,
             # ms.mutator.Parallel(): 0.02,
         }
 
@@ -145,18 +145,23 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
     (opt_level, pass_config, disabled_pass) = opt_params 
 
     KEEP = True
+    model_name = os.path.basename(model).replace(".tflite","") + "rank"
     if KEEP:
-        base_dir = Path("./tune_codesize/")
+        base_dir = Path(f"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_singlelayer_{model_name}/")
         now = datetime.now()
         ts = now.strftime("%Y%m%dT%H%M%S")
-
         label = ts
         work_dir_path = base_dir / label
     else:
         work_dir = utils.tempdir()
         work_dir_path = work_dir.path
+
     print("work_dir_path", work_dir_path)
     os.makedirs(work_dir_path, exist_ok=True)
+    # Create dir for trace and binaries
+    tracepath = str(work_dir_path) + "/trace/"
+    os.makedirs(tracepath, exist_ok=True)
+    options["work_dir_path"] = tracepath
 
     with open(os.path.join(work_dir_path, "options.txt"), "w") as f:
         f.write(str(options) + "\n")
@@ -218,23 +223,11 @@ def test_micro_tuning_with_meta_schedule(platform, opt_params, target, num_trial
                 serial_numbers=["micro"] * micro_rpc_workers,
                 tracker_host="127.0.0.1",
                 tracker_port=9190,
-                max_workers=micro_rpc_workers,
+                max_workers=64,
                 rpc_timeout_sec=10,
 
             ) as runner:
-                # tracker = connect_tracker("127.0.0.1", 9190)
-                # tracker_summary=tracker.summary()
-                # if tracker_summary["queue_info"]['$local$device']['free'] == 0:
-                    # RETRY=5
-                    # for i in range(RETRY):
-                    #     print("No free device, wait 30s and retry {}/{}".format(i+1,RETRY))
-                    #     import time
-                    #     time.sleep(30)
-                    #     tracker_summary=tracker.summary()
-                    #     if tracker_summary["queue_info"]['$local$device']['free'] == 1:
-                    #         print("Got free device, continue")
-                    #         break
-                # print("Tracker summary:\n", tracker.summary(), "\n max_trials_global: ",max_trials_global)
+
 
                 if max_trials_global > 0:
                     ## tasks are induvidual functions
@@ -297,17 +290,14 @@ def get_all_tflite_files(directory):
 if __name__ == "__main__":
 
     # MODEL = "/work/git/mlonmcu/mlonmcu/workspace_default/models/resnet/resnet.tflite"
-    model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
+    # model_path= "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models"
     # MODELS = ["/mobilenet_v1_1_0_224_quant/mobilenet_v1_1_0_224_quant.tflite","/lstm2/lstm2.tflite",
     #           "/cifar10/cifar10.tflite",""]
     tflite_files=[ 
-          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite']
-    #       '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
-    #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/MobileNetV2/MobileNet_V2.tflite',
-    #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/lstm2/lstm2.tflite',
-    #     '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
-    #      '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite',
-        #    '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/magic_wand/magic_wand.tflite']
+        #   '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite',
+          '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/aww/aww.tflite',
+        '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/vww/vww.tflite',
+         '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/toycar/toycar.tflite']
     
     
 
@@ -320,9 +310,9 @@ if __name__ == "__main__":
     ALTER_OP = True
     TOOLCHAIN = "gcc"
     TARGET = "c -num-cores 1"
-    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (10, 50, 1000000)
+    NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL = (10, 1, 1000000)
     TASK_FILTER = list(range(5)) # Tune the top 10 highest FLOPs tasks
-    MODULE_EQUALITY = "ignore-ndarray"
+    MODULE_EQUALITY = "ignore-ndarray" # Used in task extraction to get the weights
     TRANSFORM_LAYOUT = False
 
     OPTIONS = {
@@ -335,6 +325,8 @@ if __name__ == "__main__":
         "etiss_args": "",
         "arch": "rv32gc_zicsr_zifencei",
         "abi": "ilp32d",
+        "instr_trace":False,
+        "mem_trace":False,
         "cpu_arch": "RV32IMACFD",
         "cpu_freq": 100000000,
         "toolchain": "llvm",#TOOLCHAIN,
@@ -345,16 +337,16 @@ if __name__ == "__main__":
         "inline_functions":"OFF",
     }
     
-    MS_DISPATCH = 1  # silent?
-    # MS_DISPATCH = 2  # verbose
+    # MS_DISPATCH = 1  # silent?
+    MS_DISPATCH = 2  # verbose
     # MS_DISPATCH = ?  # error
     SKIP_TUNING = False
 
-    sw_opt=list(range(1,4))
-    gc=[1,0]
-    lto=[1,0]
-    opt_levels = list(range(2, 4))
-    max_stack_alloca_vals = [2**k for k in range(1, 12+1)]
+    sw_opt=["3","2","s","1"]
+    gc=[1]
+    lto=[1]
+    opt_levels = [3]
+    max_stack_alloca_vals = [0]+ [2**k for k in range(2, 12+1)]
     vals = ["ON","OFF","AUTO"]
     pass_config = {
         "tir.disable_vectorize": True,'tir.max_stack_alloca':1024
@@ -366,36 +358,36 @@ if __name__ == "__main__":
     config_list = []
 
     #MODEL = tflite_files[0] #"/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite"
-    for i,MODEL in enumerate(tflite_files):
-        for toolchain in ["llvm","gcc"]:
-            OPTIONS["toolchain"] = toolchain
-            for sw in sw_opt[::-1]:
-                OPTIONS["opt"] = sw
-                for g in gc[::-1]:
-                    OPTIONS["gc"] = g
-                    for l in lto[::-1]:
-                        OPTIONS["lto"] = l
-                        # print("OPTIONS", OPTIONS)
-                        # for unroll in vals[::-1]:
-                        #     OPTIONS["unroll_loops"] = unroll
-                        #     for inline in vals:
-                        #         OPTIONS["inline_functions"] = inline
-                        # print("OPTIONS", OPTIONS)
-                        for opt in opt_levels[::-1]:
-                            for max_stack_alloca in max_stack_alloca_vals[::-1]:
+    
+    for toolchain in ["gcc","llvm"]:
+        OPTIONS["toolchain"] = toolchain
+        for sw in sw_opt:
+            OPTIONS["opt"] = sw
+            for g in gc[::-1]:
+                OPTIONS["gc"] = g
+                for l in lto[::-1]:
+                    OPTIONS["lto"] = l
+                    # print("OPTIONS", OPTIONS)
+                    # for unroll in vals[::-1]:
+                    #     OPTIONS["unroll_loops"] = unroll
+                    #     for inline in vals:
+                    #         OPTIONS["inline_functions"] = inline
+                    # print("OPTIONS", OPTIONS)
+                    for opt in opt_levels[::-1]:
+                        for max_stack_alloca in max_stack_alloca_vals[::-1]:
+                            for i,MODEL in enumerate(tflite_files):
                                 pass_config['tir.max_stack_alloca'] = max_stack_alloca
                                 params_config = (opt, pass_config, disabled_pass)
                                 config_list.append((MODEL, params_config, OPTIONS.copy()))
-                                
-    for i, (MODEL, params_config, OPTIONS) in tqdm(enumerate(config_list[179:])):
+    with open("config_list.pkl","wb") as f:                           
+        pickle.dump(config_list, f)
+    # with open("config_list.pkl","rb") as f:
+    #     config_list = pickle.load(f)
+    print("len(config_list)= ",len(config_list))
+    for i, (MODEL, params_config, OPTIONS) in tqdm(enumerate(config_list)):
         try:
-            
-            
             db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
         except Exception as e:
             print("Exception:", MODEL, e)
             continue
-                    # tuning_log_path = "/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_logs"
-                    # tuninglog_tofeats(tuning_log_path)
-                    # with open("./tir_examples/db.pickle", "wb") as f:
-                    #     pickle.dump(db, f)
+                    

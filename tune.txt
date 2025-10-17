@@ -1,943 +1,189 @@
-OPTIONS {'verbose': True, 'quiet': True, 'gcc_prefix': '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/install/riscv_gcc_rv32', 'gcc_name': 'riscv32-unknown-elf', 'llvm_dir': '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/install/llvm', 'etiss_script': '/nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/install/etiss/bin/run_helper.sh', 'etiss_args': '', 'arch': 'rv32gc_zicsr_zifencei', 'abi': 'ilp32d', 'cpu_arch': 'RV32IMACFD', 'cpu_freq': 100000000, 'toolchain': 'gcc', 'opt': 1, 'gc': 0, 'lto': 0, 'unroll_loops': 'ON', 'inline_functions': 'ON'}
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/bigsine_quant/bigsine_quant.tflite
-work_dir_path tune_codesize/20250916T235731
-2025-09-16 23:57:37 [INFO] Logging directory: tune_codesize/20250916T235731/logs
-2025-09-16 23:57:45 [INFO] [task_scheduler.cc:174] Initializing Task #0: "fused_reshape_cast_subtract"
-2025-09-16 23:57:45 [INFO] [task_scheduler.cc:174] Initializing Task #1: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast"
-2025-09-16 23:57:45 [INFO] [task_scheduler.cc:174] Initializing Task #2: "fused_reshape_cast_subtract_1"
-2025-09-16 23:57:45 [INFO] [task_scheduler.cc:174] Initializing Task #3: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1"
-2025-09-16 23:57:45 [INFO] [task_scheduler.cc:174] Initializing Task #4: "fused_reshape_cast_subtract_2"
-2025-09-16 23:57:45 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+len(config_list)=  288
+0it [00:00, ?it/s]work_dir_path /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_singlelayer_vwwrank/20251017T143723
+2025-10-17 14:38:03 [INFO] Logging directory: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_singlelayer_vwwrank/20251017T143723/logs
+2025-10-17 14:38:15 [INFO] [task_scheduler.cc:174] Initializing Task #0: "fused_cast_subtract"
+2025-10-17 14:38:15 [INFO] [task_scheduler.cc:174] Initializing Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract"
+2025-10-17 14:38:15 [INFO] [task_scheduler.cc:174] Initializing Task #2: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1"
+2025-10-17 14:38:16 [INFO] [task_scheduler.cc:174] Initializing Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2"
+2025-10-17 14:38:16 [INFO] [task_scheduler.cc:174] Initializing Task #4: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3"
+2025-10-17 14:38:16 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Total trials: 0
 Total latency (us): 0
 
-2025-09-16 23:57:45 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_reshape_cast_subtract"
-2025-09-16 23:57:47 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
-2025-09-16 23:57:48 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
-2025-09-16 23:57:48 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast"
-2025-09-16 23:58:00 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-16 23:58:03 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-2025-09-16 23:58:03 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_reshape_cast_subtract_1"
-2025-09-16 23:58:05 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
-2025-09-16 23:58:07 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
-2025-09-16 23:58:07 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1"
-2025-09-16 23:58:18 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-16 23:58:22 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-2025-09-16 23:58:22 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_reshape_cast_subtract_2"
-2025-09-16 23:58:24 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
-2025-09-16 23:58:26 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
-costs
-rs (1.3999999737279722e-06,)
-m [441.348, 54.312, 0.0, 0.0]
-2025-09-16 23:58:26 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_reshape_cast_subtract"
-2025-09-16 23:58:26 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2025-10-17 14:38:16 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_cast_subtract"
+2025-10-17 14:38:17 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-10-17 14:38:23 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-10-17 14:38:23 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract"
+2025-10-17 14:39:14 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-10-17 14:39:16 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-10-17 14:39:16 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1"
+2025-10-17 14:40:01 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-10-17 14:40:03 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-10-17 14:40:03 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2"
+2025-10-17 14:40:22 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-10-17 14:40:24 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-10-17 14:40:24 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3"
+2025-10-17 14:41:14 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_cast_subtract"
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Total trials: 1
-Total latency (us): 1.4
-
-costs
-rs (4.280000212020241e-06,)
-m [442.644, 54.312, 0.128, 0.08]
-costs
-rs (8.369999704882503e-06,)
-m [441.572, 54.456, 0.128, 0.128]
-costs
-rs (6.260000191105064e-06,)
-m [441.492, 54.456, 0.128, 0.08]
-costs
-rs (6.199999916134402e-06,)
-m [441.556, 54.456, 0.128, 0.08]
-costs
-rs (5.909999799769139e-06,)
-m [442.628, 54.368, 0.128, 0.096]
-2025-09-16 23:58:36 [INFO] [task_scheduler.cc:252] [Updated] Task #1: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast"
-2025-09-16 23:58:36 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |      5 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 6
-Total latency (us): 5.68
-
-costs
-rs (2.640000047904323e-06,)
-m [441.348, 54.312, 0.0, 0.0]
-2025-09-16 23:58:42 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_reshape_cast_subtract_1"
-2025-09-16 23:58:42 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |      5 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 7
-Total latency (us): 8.32
-
-costs
-rs (1.852999957918655e-05,)
-m [441.604, 54.592, 0.272, 0.272]
-costs
-rs (7.139999979699496e-06,)
-m [441.636, 54.6, 0.272, 0.016]
-costs
-rs (1.8540000382927246e-05,)
-m [441.524, 54.592, 0.272, 0.272]
-costs
-rs (2.2649999664281495e-05,)
-m [441.588, 54.592, 0.272, 0.048]
-costs
-rs (1.8009999621426687e-05,)
-m [441.54, 54.592, 0.272, 0.08]
-2025-09-16 23:59:11 [INFO] [task_scheduler.cc:252] [Updated] Task #3: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1"
-2025-09-16 23:59:11 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |      5 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0370 |       7.1400 |                7.1400 |       441.6360 |          54.6000 |     0.2720 |         0.0160 |      5 |      
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 12
-Total latency (us): 15.46
-
-costs
-rs (1.7999999499807018e-06,)
-m [441.348, 54.312, 0.0, 0.0]
-2025-09-16 23:59:17 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_reshape_cast_subtract_2"
-2025-09-16 23:59:17 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |      5 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0370 |       7.1400 |                7.1400 |       441.6360 |          54.6000 |     0.2720 |         0.0160 |      5 |      
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 13
-Total latency (us): 17.26
-
-2025-09-16 23:59:17 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1"
-2025-09-16 23:59:28 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-16 23:59:31 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-costs
-rs (6.6200000219396316e-06,)
-m [442.26, 54.592, 0.272, 0.144]
-costs
-rs (2.142000084859319e-05,)
-m [441.636, 54.592, 0.272, 0.272]
-costs
-rs (7.720000212430023e-06,)
-m [441.588, 54.6, 0.272, 0.032]
-costs
-rs (7.139999979699496e-06,)
-m [441.636, 54.6, 0.272, 0.016]
-costs
-rs (7.720000212430023e-06,)
-m [441.588, 54.6, 0.272, 0.032]
-2025-09-17 00:00:01 [INFO] [task_scheduler.cc:252] [Updated] Task #3: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1"
-2025-09-17 00:00:01 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |      5 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |      
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 18
-Total latency (us): 16.74
-
-2025-09-17 00:00:01 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1"
-2025-09-17 00:00:01 [INFO] [task_scheduler.cc:275] Task #3 has finished. Remaining task(s): 4
-2025-09-17 00:00:01 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |      5 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 18
-Total latency (us): 16.74
-
-2025-09-17 00:00:01 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast"
-2025-09-17 00:00:12 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:00:15 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-costs
-rs (7.239999831654131e-06,)
-m [441.508, 54.456, 0.128, 0.128]
-costs
-rs (6.060000032448443e-06,)
-m [442.644, 54.368, 0.128, 0.128]
-costs
-rs (6.090000169933774e-06,)
-m [441.46, 54.456, 0.128, 0.08]
-costs
-rs (7.1200001912075095e-06,)
-m [441.492, 54.448, 0.128, 0.048]
-costs
-rs (6.060000032448443e-06,)
-m [442.644, 54.368, 0.128, 0.128]
-2025-09-17 00:00:55 [INFO] [task_scheduler.cc:252] [Updated] Task #1: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast"
-2025-09-17 00:00:55 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |      
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:00:55 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_dense_add_fixed_point_multiply_add_clip_cast"
-2025-09-17 00:00:55 [INFO] [task_scheduler.cc:275] Task #1 has finished. Remaining task(s): 3
-2025-09-17 00:00:55 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:00:55 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:00:57 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:00:57 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:00:57 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:00:57 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:00:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:00:58 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:00:58 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:00:58 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:00:58 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:00:58 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:00 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:00 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:00 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:00 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:00 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:01:02 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:02 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:02 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:01:02 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:02 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:01:03 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:03 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:03 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:01:03 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:03 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:01:05 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:05 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:05 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:01:05 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:05 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:07 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:07 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:07 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:07 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:07 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:01:08 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:08 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:08 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:01:08 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:08 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:01:10 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:10 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:10 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:01:10 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:10 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_reshape_cast_subtract_1"
-2025-09-17 00:01:12 [INFO] [task_scheduler.cc:275] Task #2 has finished. Remaining task(s): 2
-2025-09-17 00:01:12 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:12 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:13 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:13 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:13 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:13 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:13 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:01:15 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:15 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:15 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:01:15 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:15 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_reshape_cast_subtract_2"
-2025-09-17 00:01:17 [INFO] [task_scheduler.cc:275] Task #4 has finished. Remaining task(s): 1
-2025-09-17 00:01:17 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:17 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:18 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:01:18 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:01:18 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:18 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-2025-09-17 00:01:18 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_reshape_cast_subtract"
-2025-09-17 00:01:20 [INFO] [task_scheduler.cc:275] Task #0 has finished. Remaining task(s): 0
-2025-09-17 00:01:20 [INFO] [task_scheduler.cc:350] 
- ID |                                                    Name | FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                             fused_reshape_cast_subtract |    1 |      1 |         0.0007 |       1.4000 |                1.4000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-  1 |   fused_nn_dense_add_fixed_point_multiply_add_clip_cast |  120 |      1 |         0.0280 |       4.2800 |                4.2800 |       442.6440 |          54.3120 |     0.1280 |         0.0800 |     10 |    Y 
-  2 |                           fused_reshape_cast_subtract_1 |   20 |      1 |         0.0076 |       2.6400 |                2.6400 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-  3 | fused_nn_dense_add_fixed_point_multiply_add_clip_cast_1 |  264 |      1 |         0.0399 |       6.6200 |                6.6200 |       442.2600 |          54.5920 |     0.2720 |         0.1440 |     10 |    Y 
-  4 |                           fused_reshape_cast_subtract_2 |    6 |      1 |         0.0033 |       1.8000 |                1.8000 |       441.3480 |          54.3120 |     0.0000 |         0.0000 |      1 |    Y 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 23
-Total latency (us): 16.74
-
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/vww_layer17.tflite
-work_dir_path tune_codesize/20250917T000120
-2025-09-17 00:01:20 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:01:26 [INFO] Logging directory: tune_codesize/20250917T000120/logs
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/vww_layer17.tflite list index out of range
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/aww_layer7.tflite
-work_dir_path tune_codesize/20250917T000126
-2025-09-17 00:01:26 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:01:32 [INFO] Logging directory: tune_codesize/20250917T000126/logs
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/aww_layer7.tflite list index out of range
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/resnet_layer10.tflite
-work_dir_path tune_codesize/20250917T000132
-2025-09-17 00:01:32 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:01:39 [INFO] Logging directory: tune_codesize/20250917T000132/logs
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/resnet_layer10.tflite list index out of range
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/vww_layer27.tflite
-work_dir_path tune_codesize/20250917T000139
-2025-09-17 00:01:39 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:01:45 [INFO] Logging directory: tune_codesize/20250917T000139/logs
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/vww_layer27.tflite list index out of range
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/vww_layer29.tflite
-work_dir_path tune_codesize/20250917T000145
-2025-09-17 00:01:45 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:01:51 [INFO] Logging directory: tune_codesize/20250917T000145/logs
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/vww_layer29.tflite list index out of range
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/simple_mnist/MNIST_model_quantized.tflite
-work_dir_path tune_codesize/20250917T000151
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/simple_mnist/MNIST_model_quantized.tflite The following operators are likely to have dynamic range quantization: 'FULLY_CONNECTED'. If you are running an optimized graph, please turn off dynamic range quantization or use full integer quantization
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/resnet_layer1.tflite
-work_dir_path tune_codesize/20250917T000151
-2025-09-17 00:01:51 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:01:56 [INFO] Logging directory: tune_codesize/20250917T000151/logs
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/resnet_layer1.tflite list index out of range
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/catdog/catdog.tflite
-work_dir_path tune_codesize/20250917T000157
-2025-09-17 00:01:57 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:02:03 [INFO] Logging directory: tune_codesize/20250917T000157/logs
-2025-09-17 00:02:03 [INFO] [task_scheduler.cc:174] Initializing Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:02:03 [INFO] [task_scheduler.cc:174] Initializing Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast"
-2025-09-17 00:02:03 [INFO] [task_scheduler.cc:174] Initializing Task #2: "fused_nn_max_pool2d_cast_subtract"
-2025-09-17 00:02:03 [INFO] [task_scheduler.cc:174] Initializing Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1"
-2025-09-17 00:02:03 [INFO] [task_scheduler.cc:174] Initializing Task #4: "fused_nn_max_pool2d_cast_subtract_1"
-2025-09-17 00:02:03 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 0
 Total latency (us): 0
 
-2025-09-17 00:02:03 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:02:09 [INFO] [task_scheduler.cc:208] Sending 1 sample(s) to builder
-2025-09-17 00:02:10 [INFO] [task_scheduler.cc:210] Sending 1 sample(s) to runner
-2025-09-17 00:02:10 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast"
-2025-09-17 00:02:41 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:02:45 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-2025-09-17 00:02:45 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_nn_max_pool2d_cast_subtract"
-2025-09-17 00:02:52 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:02:57 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-2025-09-17 00:02:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1"
-2025-09-17 00:03:29 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:03:33 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-2025-09-17 00:03:33 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_nn_max_pool2d_cast_subtract_1"
-2025-09-17 00:03:40 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:03:44 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-costs
-rs (9.046000195667148e-05,)
-m [441.636, 54.328, 0.0, 0.0]
-2025-09-17 00:03:44 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:03:44 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 1
-Total latency (us): 90.46
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:252] [Updated] Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract"
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 2
+Total latency (us): 0
 
-costs
-rs (0.001893069944344461,)
-m [443.156, 54.864, 0.736, 4.0]
-costs
-rs (0.004059419967234135,)
-m [442.324, 55.008, 0.736, 0.016]
-costs
-rs (0.002629030030220747,)
-m [442.1, 55.008, 0.736, 1.072]
-costs
-rs (0.003457070095464587,)
-m [442.148, 55.008, 0.736, 0.336]
-costs
-rs (0.003110910067334771,)
-m [442.564, 55.008, 0.736, 0.208]
-2025-09-17 00:03:44 [INFO] [task_scheduler.cc:252] [Updated] Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast"
-2025-09-17 00:03:44 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |      5 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 6
-Total latency (us): 1983.53
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1"
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 3
+Total latency (us): 0
 
-costs
-rs (3.2500000088475645e-05,)
-m [441.444, 54.312, 0.0, 0.064]
-costs
-rs (3.202000152668916e-05,)
-m [441.46, 54.312, 0.0, 0.256]
-costs
-rs (3.202000152668916e-05,)
-m [441.46, 54.312, 0.0, 0.256]
-costs
-rs (1.497999983257614e-05,)
-m [442.052, 54.312, 0.0, 0.064]
-costs
-rs (1.8209999325335957e-05,)
-m [441.396, 54.312, 0.0, 0.016]
-2025-09-17 00:04:12 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_nn_max_pool2d_cast_subtract"
-2025-09-17 00:04:12 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |      5 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 11
-Total latency (us): 1998.51
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:252] [Updated] Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2"
+2025-10-17 14:41:17 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 4
+Total latency (us): 0
 
-costs
-rs (0.004744810052216053,)
-m [442.052, 58.168, 3.92, 2.992]
-costs
-rs (0.002901890082284808,)
-m [442.132, 58.168, 3.92, 0.48]
-costs
-rs (0.004175699781626463,)
-m [442.116, 58.168, 3.92, 0.24]
-costs
-rs (0.0020932499319314957,)
-m [443.012, 58.168, 3.92, 0.224]
-costs
-rs (0.002595480065792799,)
-m [442.276, 58.168, 3.92, 2.432]
-2025-09-17 00:04:45 [INFO] [task_scheduler.cc:252] [Updated] Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1"
-2025-09-17 00:04:45 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |      5 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |      5 |      
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |            N/A |          N/A |                   N/A |            N/A |              N/A |        N/A |            N/A |      0 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 16
-Total latency (us): 4091.76
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3"
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 5
+Total latency (us): 0
 
-costs
-rs (6.350000148813706e-06,)
-m [441.46, 54.312, 0.0, 0.016]
-costs
-rs (8.070000149018597e-06,)
-m [441.892, 54.312, 0.0, 0.048]
-costs
-rs (1.0450000445416663e-05,)
-m [441.54, 54.312, 0.0, 0.08]
-costs
-rs (1.3930000022810418e-05,)
-m [441.444, 54.312, 0.0, 0.016]
-costs
-rs (6.350000148813706e-06,)
-m [441.46, 54.312, 0.0, 0.016]
-2025-09-17 00:05:19 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_nn_max_pool2d_cast_subtract_1"
-2025-09-17 00:05:19 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |      5 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |      5 |      
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 21
-Total latency (us): 4098.11
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract"
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:275] Task #1 has finished. Remaining task(s): 4
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 5
+Total latency (us): 0
 
-2025-09-17 00:05:19 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1"
-2025-09-17 00:05:46 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:05:50 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-costs
-rs (0.002952819922938943,)
-m [442.292, 58.168, 3.92, 2.992]
-costs
-rs (0.00280345999635756,)
-m [442.772, 58.168, 3.92, 0.304]
-costs
-rs (0.006803300231695175,)
-m [442.148, 58.168, 3.92, 1.008]
-costs
-rs (0.00515887001529336,)
-m [442.26, 58.168, 3.92, 2.992]
-costs
-rs (0.004604729823768139,)
-m [442.02, 58.168, 3.92, 0.144]
-2025-09-17 00:06:23 [INFO] [task_scheduler.cc:252] [Updated] Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1"
-2025-09-17 00:06:23 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |      5 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |      
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 26
-Total latency (us): 4098.11
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3"
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:275] Task #4 has finished. Remaining task(s): 3
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 5
+Total latency (us): 0
 
-2025-09-17 00:06:23 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1"
-2025-09-17 00:06:23 [INFO] [task_scheduler.cc:275] Task #3 has finished. Remaining task(s): 4
-2025-09-17 00:06:23 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |      5 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 26
-Total latency (us): 4098.11
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1"
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:275] Task #2 has finished. Remaining task(s): 2
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 5
+Total latency (us): 0
 
-2025-09-17 00:06:23 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast"
-2025-09-17 00:06:52 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:06:57 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-costs
-rs (0.003869340056553483,)
-m [442.148, 55.008, 0.736, 4.192]
-costs
-rs (0.0019018499879166484,)
-m [442.372, 55.008, 0.736, 4.864]
-costs
-rs (0.0036442200653254986,)
-m [442.308, 55.008, 0.736, 1.664]
-costs
-rs (0.0029816299211233854,)
-m [442.5, 55.008, 0.736, 1.024]
-costs
-rs (0.0026505899149924517,)
-m [442.212, 55.008, 0.736, 0.24]
-2025-09-17 00:07:30 [INFO] [task_scheduler.cc:252] [Updated] Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast"
-2025-09-17 00:07:30 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |      
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 31
-Total latency (us): 4098.11
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #3: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2"
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:275] Task #3 has finished. Remaining task(s): 1
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |      
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 5
+Total latency (us): 0
 
-2025-09-17 00:07:30 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #1: "fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast"
-2025-09-17 00:07:30 [INFO] [task_scheduler.cc:275] Task #1 has finished. Remaining task(s): 3
-2025-09-17 00:07:30 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 31
-Total latency (us): 4098.11
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_cast_subtract"
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:275] Task #0 has finished. Remaining task(s): 0
+2025-10-17 14:41:57 [INFO] [task_scheduler.cc:350] 
+ ID |                                                                       Name |    FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0 |                                                        fused_cast_subtract |   27648 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract | 1087488 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  2 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_1 |  423936 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_2 |  774144 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+  4 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_subtract_3 |  211968 |      1 |            inf |       0.0000 |                0.0000 |         0.0000 |           0.0000 |     0.0000 |         0.0000 |      1 |    Y 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total trials: 5
+Total latency (us): 0
 
-2025-09-17 00:07:30 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:36 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:07:36 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:07:36 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:36 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 31
-Total latency (us): 4098.11
-
-2025-09-17 00:07:36 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:41 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:07:41 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:07:41 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:41 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 31
-Total latency (us): 4098.11
-
-2025-09-17 00:07:41 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:46 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:07:46 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:07:46 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:46 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 31
-Total latency (us): 4098.11
-
-2025-09-17 00:07:46 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:51 [INFO] [task_scheduler.cc:208] Sending 0 sample(s) to builder
-2025-09-17 00:07:51 [INFO] [task_scheduler.cc:210] Sending 0 sample(s) to runner
-2025-09-17 00:07:51 [INFO] [task_scheduler.cc:252] [Updated] Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:51 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |      
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 31
-Total latency (us): 4098.11
-
-2025-09-17 00:07:51 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #0: "fused_divide_round_add_clip_cast_subtract"
-2025-09-17 00:07:56 [INFO] [task_scheduler.cc:275] Task #0 has finished. Remaining task(s): 2
-2025-09-17 00:07:56 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |    Y 
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |      5 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 31
-Total latency (us): 4098.11
-
-2025-09-17 00:07:56 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_nn_max_pool2d_cast_subtract"
-2025-09-17 00:08:02 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:08:07 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-costs
-rs (1.8209999325335957e-05,)
-m [441.396, 54.312, 0.0, 0.016]
-costs
-rs (8.741000056033954e-05,)
-m [441.556, 54.312, 0.0, 0.256]
-costs
-rs (3.202000152668916e-05,)
-m [441.46, 54.312, 0.0, 0.256]
-costs
-rs (7.839000318199396e-05,)
-m [441.492, 54.312, 0.0, 0.016]
-costs
-rs (2.424000012979377e-05,)
-m [441.54, 54.312, 0.0, 0.064]
-2025-09-17 00:08:40 [INFO] [task_scheduler.cc:252] [Updated] Task #2: "fused_nn_max_pool2d_cast_subtract"
-2025-09-17 00:08:40 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |    Y 
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |     10 |      
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 36
-Total latency (us): 4098.11
-
-2025-09-17 00:08:40 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #2: "fused_nn_max_pool2d_cast_subtract"
-2025-09-17 00:08:40 [INFO] [task_scheduler.cc:275] Task #2 has finished. Remaining task(s): 1
-2025-09-17 00:08:40 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |    Y 
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |     10 |    Y 
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |      5 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 36
-Total latency (us): 4098.11
-
-2025-09-17 00:08:40 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_nn_max_pool2d_cast_subtract_1"
-2025-09-17 00:08:46 [INFO] [task_scheduler.cc:208] Sending 5 sample(s) to builder
-2025-09-17 00:08:49 [INFO] [task_scheduler.cc:210] Sending 5 sample(s) to runner
-costs
-rs (1.0540000403125305e-05,)
-m [441.46, 54.312, 0.0, 0.048]
-costs
-rs (1.0450000445416663e-05,)
-m [441.54, 54.312, 0.0, 0.08]
-costs
-rs (8.27999974717386e-06,)
-m [441.652, 54.312, 0.0, 0.032]
-costs
-rs (1.6489999325131066e-05,)
-m [441.476, 54.312, 0.0, 0.032]
-costs
-rs (1.0779999684018549e-05,)
-m [441.428, 54.312, 0.0, 0.032]
-2025-09-17 00:09:22 [INFO] [task_scheduler.cc:252] [Updated] Task #4: "fused_nn_max_pool2d_cast_subtract_1"
-2025-09-17 00:09:22 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |    Y 
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |     10 |    Y 
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |     10 |      
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 41
-Total latency (us): 4098.11
-
-2025-09-17 00:09:22 [INFO] [task_scheduler.cc:195] TaskScheduler picks Task #4: "fused_nn_max_pool2d_cast_subtract_1"
-2025-09-17 00:09:22 [INFO] [task_scheduler.cc:275] Task #4 has finished. Remaining task(s): 0
-2025-09-17 00:09:22 [INFO] [task_scheduler.cc:350] 
- ID |                                                              Name |  FLOP | Weight | Speed (GFLOPS) | Latency (us) | Weighted Latency (us) | Mem .text [kB] | Mem .rodata [kB] | Const [kB] | workspace [kB] | Trials | Done 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  0 |                         fused_divide_round_add_clip_cast_subtract |  1500 |      1 |         0.0166 |      90.4600 |               90.4600 |       441.6360 |          54.3280 |     0.0000 |         0.0000 |      1 |    Y 
-  1 |   fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast | 58000 |      1 |         0.0306 |    1893.0699 |             1893.0699 |       443.1560 |          54.8640 |     0.7360 |         4.0000 |     10 |    Y 
-  2 |                                 fused_nn_max_pool2d_cast_subtract |  1250 |      1 |         0.0834 |      14.9800 |               14.9800 |       442.0520 |          54.3120 |     0.0000 |         0.0640 |     10 |    Y 
-  3 | fused_nn_conv2d_add_fixed_point_multiply_per_axis_add_clip_cast_1 | 92000 |      1 |         0.0440 |    2093.2499 |             2093.2499 |       443.0120 |          58.1680 |     3.9200 |         0.2240 |     10 |    Y 
-  4 |                               fused_nn_max_pool2d_cast_subtract_1 |   400 |      1 |         0.0630 |       6.3500 |                6.3500 |       441.4600 |          54.3120 |     0.0000 |         0.0160 |     10 |    Y 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total trials: 41
-Total latency (us): 4098.11
-
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/aww_layer9.tflite
-work_dir_path tune_codesize/20250917T000922
-2025-09-17 00:09:23 [INFO] LocalBuilder: max_workers = 4
-2025-09-17 00:09:28 [INFO] Logging directory: tune_codesize/20250917T000922/logs
-Exception: /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/layers/aww_layer9.tflite list index out of range
-(3, {'tir.disable_vectorize': True, 'tir.max_stack_alloca': 2}, ['AlterOpLayout']) /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/models/resnet/resnet.tflite
-work_dir_path tune_codesize/20250917T000928
-2025-09-17 00:09:28 [INFO] LocalBuilder: max_workers = 4
+1it [04:34, 274.58s/it]work_dir_path /nfs/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/tune_singlelayer_awwrank/20251017T144158
+2025-10-17 14:41:58 [INFO] LocalBuilder: max_workers = 48
+1it [04:52, 292.03s/it]
 Traceback (most recent call last):
-  File "micro_ms_cost_model_etiss.py", line 390, in <module>
+  File "micro_ms_cost_model_etiss.py", line 389, in <module>
     db = test_micro_tuning_with_meta_schedule(PLATFORM, params_config, TARGET, NUM_TRIALS_PER_ITER, MAX_TRIALS_PER_TASK, MAX_TRIALS_GLOBAL, MODULE_EQUALITY, MODEL, TRANSFORM_LAYOUT, OPTIONS, TASK_FILTER)
-  File "micro_ms_cost_model_etiss.py", line 216, in test_micro_tuning_with_meta_schedule
+  File "micro_ms_cost_model_etiss.py", line 221, in test_micro_tuning_with_meta_schedule
     with get_rpc_runner_micro_mem(
   File "/usr/lib/python3.8/contextlib.py", line 113, in __enter__
     return next(self.gen)
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/contrib/micro/meta_schedule/rpc_runner_micro_mem.py", line 493, in get_rpc_runner_micro_mem
-    tracker = Tracker(
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/rpc/tracker.py", line 475, in __init__
-    self.port, self.stop_key = self.proc.recv()
+  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/contrib/micro/meta_schedule/rpc_runner_micro_mem.py", line 521, in get_rpc_runner_micro_mem
+    server = Server(
+  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/rpc/server.py", line 539, in __init__
+    self.port = self.proc.recv()
   File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/contrib/popen_pool.py", line 289, in recv
     len_data = self._reader.read(4)
-  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/contrib/micro/meta_schedule/rpc_runner_micro_mem.py", line 532, in handle_SIGINT
+  File "/nas/ei/share/TUEIEDAscratch/ge85zic/mlonmcu_env/deps/src/tvm/python/tvm/contrib/micro/meta_schedule/rpc_runner_micro_mem.py", line 539, in handle_SIGINT
     raise KeyboardInterrupt("Received SIGINT")
 KeyboardInterrupt: Received SIGINT
